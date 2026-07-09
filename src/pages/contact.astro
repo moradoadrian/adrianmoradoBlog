@@ -169,12 +169,14 @@ const faqs = [
               <div class="pt-2">
                 <button 
                   type="submit" 
-                  class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_rgba(109,94,249,0.4)] border border-primary/20 hover:border-accent cursor-pointer flex items-center justify-center gap-2"
+                  id="submit-btn"
+                  class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_rgba(109,94,249,0.4)] border border-primary/20 hover:border-accent cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                  <span>Enviar Formulario</span>
+                  <span id="btn-text">Enviar Formulario</span>
                   <span class="text-xs">&rarr;</span>
                 </button>
               </div>
+              <div id="form-status" class="text-center text-xs font-sans mt-3 hidden"></div>
             </form>
           </div>
         </div>
@@ -213,7 +215,8 @@ const faqs = [
 </Layout>
 
 <script>
-  function setupFaqs() {
+  function setupContactPage() {
+    // 1. Lógica del Acordeón FAQ
     const triggers = document.querySelectorAll('.faq-trigger');
     
     triggers.forEach(trigger => {
@@ -227,7 +230,7 @@ const faqs = [
         
         const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
         
-        // Close all others
+        // Cerrar los demás acordeones
         triggers.forEach(otherTrigger => {
           if (otherTrigger !== trigger) {
             const otherCard = otherTrigger.parentElement;
@@ -241,7 +244,7 @@ const faqs = [
           }
         });
 
-        // Toggle current
+        // Alternar el acordeón seleccionado
         if (isOpen) {
           content.style.maxHeight = '0px';
           card?.classList.remove('border-primary/30');
@@ -254,17 +257,71 @@ const faqs = [
       });
     });
 
-    // Form submit placeholder
+    // 2. Lógica del envío del formulario mediante API de Astro con Resend
     const form = document.getElementById('contact-form') as HTMLFormElement;
-    if (form) {
-      form.addEventListener('submit', (e) => {
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const btnText = document.getElementById('btn-text') as HTMLSpanElement;
+    const formStatus = document.getElementById('form-status') as HTMLDivElement;
+
+    if (form && submitBtn && btnText && formStatus) {
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        alert('¡Mensaje enviado con éxito! César se pondrá en contacto contigo pronto.');
-        form.reset();
+
+        // Deshabilitar botón y mostrar estado de envío
+        submitBtn.disabled = true;
+        btnText.textContent = 'Enviando...';
+        formStatus.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
+        formStatus.classList.add('text-text-muted');
+        formStatus.textContent = 'Enviando mensaje...';
+
+        // Obtener valores del formulario
+        const formData = new FormData(form);
+        const payload = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          subject: formData.get('subject'),
+          message: formData.get('message')
+        };
+
+        try {
+          // Petición POST a la API route
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            // Éxito: Limpiar formulario y dar feedback positivo
+            form.reset();
+            formStatus.classList.remove('text-text-muted', 'text-rose-400');
+            formStatus.classList.add('text-emerald-400');
+            formStatus.textContent = '¡Mensaje enviado con éxito! César se pondrá en contacto contigo pronto.';
+          } else {
+            // Error controlado retornado por la API
+            formStatus.classList.remove('text-text-muted', 'text-emerald-400');
+            formStatus.classList.add('text-rose-400');
+            formStatus.textContent = result.error || 'Ocurrió un error al enviar el formulario.';
+          }
+        } catch (error) {
+          // Error de red
+          console.error('Error de red al enviar formulario:', error);
+          formStatus.classList.remove('text-text-muted', 'text-emerald-400');
+          formStatus.classList.add('text-rose-400');
+          formStatus.textContent = 'Ocurrió un error de red. Por favor, verifica tu conexión e intenta de nuevo.';
+        } finally {
+          // Restaurar botón a su estado original
+          submitBtn.disabled = false;
+          btnText.textContent = 'Enviar Formulario';
+        }
       });
     }
   }
 
-  setupFaqs();
-  document.addEventListener('astro:page-load', setupFaqs);
+  setupContactPage();
+  document.addEventListener('astro:page-load', setupContactPage);
 </script>
