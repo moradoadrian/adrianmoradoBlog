@@ -1,0 +1,270 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+  {
+    q: '¿Qué tipo de proyectos frontend desarrollas?',
+    a: 'Me especializo en el desarrollo de aplicaciones web de gran escala, dashboards corporativos, herramientas administrativas y portafolios interactivos utilizando Angular, React, Astro y arquitecturas basadas en TypeScript de alto rendimiento.'
+  },
+  {
+    q: '¿Estás disponible para consultorías o proyectos Freelance?',
+    a: 'Actualmente me desempeño como Ingeniero de Software a tiempo completo, pero estoy abierto a consultorías técnicas especializadas, conferencias y colaboraciones de corta duración según mi disponibilidad horaria.'
+  },
+  {
+    q: '¿Cuál es tu horario de respuesta habitual?',
+    a: 'Suelo responder los correos y mensajes del formulario en un lapso de 24 a 48 horas. Mi horario de actividad para proyectos independientes es principalmente por las tardes/noches (de 18:00 a 22:00 GMT-6) y los fines de semana.'
+  },
+  {
+    q: '¿En qué ciudad te encuentras ubicado?',
+    a: 'Resido y trabajo en Celaya, Guanajuato, México. Tengo amplia experiencia colaborando con equipos distribuidos en modalidad remota.'
+  }
+];
+---
+
+<Layout title="Contacto | César Adrián Morado" description="Ponte en contacto para propuestas profesionales, consultorías frontend o preguntas técnicas sobre Angular, React y desarrollo web.">
+  <main class="min-h-screen pt-32 pb-24 px-4 relative overflow-hidden">
+    <!-- Glow backgrounds -->
+    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[140px] pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto space-y-16 relative z-10">
+      
+      <!-- Breadcrumbs -->
+      <nav class="text-xs sm:text-sm text-text-muted flex items-center gap-2 select-none" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-accent transition-colors duration-200">Inicio</a>
+        <span>/</span>
+        <a href="/legal" class="hover:text-accent transition-colors duration-200">Legal</a>
+        <span>/</span>
+        <span class="text-white font-medium">Contacto</span>
+      </nav>
+
+      <!-- Hero Header -->
+      <div class="text-center max-w-2xl mx-auto space-y-4">
+        <h1 class="text-4xl sm:text-6xl font-display font-bold text-white tracking-tight leading-none">
+          Ponte en <span class="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Contacto</span>
+        </h1>
+        <p class="text-text-muted text-base sm:text-lg font-sans">
+          ¿Tienes una propuesta interesante, una consulta técnica o buscas un desarrollador Frontend Senior? Escríbeme y charlemos.
+        </p>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-5xl mx-auto items-start">
+        
+        <!-- Left Column: Contact Cards & Info -->
+        <div class="lg:col-span-5 space-y-6">
+          
+          <!-- Contact details glass card -->
+          <div class="glass-card p-8 rounded-3xl border border-white/5 bg-card-dark/40 space-y-6">
+            <h2 class="text-xl sm:text-2xl font-display font-bold text-white">Canales Directos</h2>
+            
+            <div class="space-y-4 font-sans text-sm sm:text-base">
+              <!-- Correo -->
+              <a href="mailto:moradoadrian@gmail.com" class="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-primary hover:bg-primary/5 transition-all duration-300 group">
+                <span class="text-2xl select-none group-hover:scale-110 transition-transform duration-300">📧</span>
+                <div>
+                  <span class="block text-xs text-text-muted">Correo electrónico</span>
+                  <span class="text-white font-semibold group-hover:text-accent transition-colors duration-300 truncate max-w-[200px] block">moradoadrian@gmail.com</span>
+                </div>
+              </a>
+
+              <!-- LinkedIn -->
+              <a href="https://www.linkedin.com/in/c%C3%A9sar-adri%C3%A1n-morado-rodr%C3%ADguez-382a0b162/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-secondary hover:bg-secondary/5 transition-all duration-300 group">
+                <span class="text-2xl select-none group-hover:scale-110 transition-transform duration-300">💼</span>
+                <div>
+                  <span class="block text-xs text-text-muted">LinkedIn</span>
+                  <span class="text-white font-semibold group-hover:text-accent transition-colors duration-300">César Adrián Morado Rodríguez</span>
+                </div>
+              </a>
+
+              <!-- GitHub -->
+              <a href="https://github.com/moradoadrian" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-accent hover:bg-accent/5 transition-all duration-300 group">
+                <span class="text-2xl select-none group-hover:scale-110 transition-transform duration-300">🐙</span>
+                <div>
+                  <span class="block text-xs text-text-muted">GitHub</span>
+                  <span class="text-white font-semibold group-hover:text-accent transition-colors duration-300">@moradoadrian</span>
+                </div>
+              </a>
+            </div>
+
+            <!-- Response Hour box -->
+            <div class="pt-4 border-t border-white/5 text-xs text-text-muted space-y-1.5 font-sans">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span class="font-semibold text-white">Horario de atención estimado:</span>
+              </div>
+              <p>Lunes a Viernes: 18:00 - 22:00 (GMT-6)<br />Sábados y Domingos: Horario Flexible</p>
+            </div>
+          </div>
+
+          <!-- Location Placeholder Map -->
+          <div class="glass-card p-6 rounded-3xl border border-white/5 bg-card-dark/40 space-y-4">
+            <h3 class="text-sm font-display font-bold text-white select-none">📍 Ubicación Geográfica</h3>
+            <div class="relative w-full aspect-video rounded-2xl bg-bg-dark/80 border border-white/10 overflow-hidden flex flex-col items-center justify-center text-center p-4">
+              <!-- Grid background placeholder for map -->
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,#6d5ef912_1px,transparent_1px)] bg-[size:16px_16px] opacity-40"></div>
+              <span class="text-3xl animate-bounce mb-2">🇲🇽</span>
+              <p class="text-xs font-semibold text-white font-display">Celaya, Guanajuato, México</p>
+              <p class="text-[10px] text-text-muted mt-1 font-sans">Disponible para colaboraciones remotas a nivel global.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Premium Contact Form -->
+        <div class="lg:col-span-7">
+          <div class="glass-card p-8 rounded-3xl border border-white/5 bg-card-dark/40 space-y-6">
+            <h2 class="text-xl sm:text-2xl font-display font-bold text-white">Enviar Mensaje</h2>
+            
+            <form class="space-y-4 font-sans text-sm" id="contact-form">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label for="name" class="block font-semibold text-white/70">Nombre completo *</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required 
+                    placeholder="Ej. Juan Pérez" 
+                    class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-primary transition-colors duration-300"
+                  />
+                </div>
+                <div class="space-y-1.5">
+                  <label for="email" class="block font-semibold text-white/70">Correo electrónico *</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    placeholder="Ej. tu@correo.com" 
+                    class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-secondary transition-colors duration-300"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="subject" class="block font-semibold text-white/70">Asunto *</label>
+                <input 
+                  type="text" 
+                  id="subject" 
+                  name="subject" 
+                  required 
+                  placeholder="Ej. Oportunidad de Proyecto / Consulta Técnica" 
+                  class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-accent transition-colors duration-300"
+                />
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="message" class="block font-semibold text-white/70">Mensaje *</label>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  rows="5" 
+                  required 
+                  placeholder="Escribe aquí los detalles de tu consulta..." 
+                  class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-accent transition-colors duration-300 resize-none"
+                ></textarea>
+              </div>
+
+              <div class="pt-2">
+                <button 
+                  type="submit" 
+                  class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_rgba(109,94,249,0.4)] border border-primary/20 hover:border-accent cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span>Enviar Formulario</span>
+                  <span class="text-xs">&rarr;</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FAQ Section Accordion -->
+      <div class="max-w-4xl mx-auto space-y-8 border-t border-white/10 pt-16">
+        <div class="text-center space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-display font-bold text-white">Preguntas Frecuentes (FAQ)</h2>
+          <p class="text-text-muted text-sm font-sans">Respuestas rápidas a las dudas técnicas y de servicios más comunes.</p>
+        </div>
+
+        <div class="space-y-4 max-w-3xl mx-auto" id="faq-accordion">
+          {faqs.map((faq, index) => (
+            <div class="glass-card rounded-2xl border border-white/5 bg-card-dark/20 overflow-hidden transition-colors duration-300">
+              <button 
+                class="w-full px-6 py-5 text-left font-display font-bold text-sm sm:text-base text-white hover:text-accent transition-colors duration-200 flex items-center justify-between gap-4 focus:outline-none cursor-pointer faq-trigger"
+                data-index={index}
+              >
+                <span>{faq.q}</span>
+                <span class="text-xs text-text-muted transition-transform duration-300 faq-icon">+</span>
+              </button>
+              <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out faq-content">
+                <div class="px-6 pb-5 text-sm sm:text-base text-text-muted font-sans border-t border-white/5 pt-4 leading-relaxed">
+                  {faq.a}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </main>
+</Layout>
+
+<script>
+  function setupFaqs() {
+    const triggers = document.querySelectorAll('.faq-trigger');
+    
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const index = trigger.getAttribute('data-index');
+        const card = trigger.parentElement;
+        const icon = trigger.querySelector('.faq-icon');
+        const content = card?.querySelector('.faq-content') as HTMLElement;
+        
+        if (!content) return;
+        
+        const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+        
+        // Close all others
+        triggers.forEach(otherTrigger => {
+          if (otherTrigger !== trigger) {
+            const otherCard = otherTrigger.parentElement;
+            const otherIcon = otherTrigger.querySelector('.faq-icon');
+            const otherContent = otherCard?.querySelector('.faq-content') as HTMLElement;
+            if (otherContent) {
+              otherContent.style.maxHeight = '0px';
+              otherCard?.classList.remove('border-primary/30');
+              if (otherIcon) otherIcon.textContent = '+';
+            }
+          }
+        });
+
+        // Toggle current
+        if (isOpen) {
+          content.style.maxHeight = '0px';
+          card?.classList.remove('border-primary/30');
+          if (icon) icon.textContent = '+';
+        } else {
+          content.style.maxHeight = content.scrollHeight + 'px';
+          card?.classList.add('border-primary/30');
+          if (icon) icon.textContent = '−';
+        }
+      });
+    });
+
+    // Form submit placeholder
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('¡Mensaje enviado con éxito! César se pondrá en contacto contigo pronto.');
+        form.reset();
+      });
+    }
+  }
+
+  setupFaqs();
+  document.addEventListener('astro:page-load', setupFaqs);
+</script>

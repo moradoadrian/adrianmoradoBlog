@@ -1,0 +1,91 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+
+const title = 'Términos y Condiciones';
+const description = 'Acuerdo legal y condiciones de uso aplicables al navegar por nuestro blog técnico y portafolio profesional.';
+const lastUpdated = '9 de julio, 2026';
+const readingTime = '3 min';
+
+const headings = [
+  { slug: 'objeto', text: '1. Objeto del Sitio', depth: 2 },
+  { slug: 'uso-permitido', text: '2. Uso Permitido', depth: 2 },
+  { slug: 'propiedad-intelectual', text: '3. Propiedad Intelectual', depth: 2 },
+  { slug: 'contenido-educativo', text: '4. Naturaleza del Contenido', depth: 2 },
+  { slug: 'responsabilidad', text: '5. Limitación de Responsabilidad', depth: 2 },
+  { slug: 'enlaces-externos', text: '6. Enlaces a Terceros', depth: 2 },
+  { slug: 'cambios', text: '7. Modificaciones del Sitio', depth: 2 },
+  { slug: 'legislacion', text: '8. Legislación Aplicable', depth: 2 },
+  { slug: 'contacto', text: '9. Contacto', depth: 2 }
+];
+---
+
+<LegalLayout 
+  title={title} 
+  description={description} 
+  lastUpdated={lastUpdated} 
+  readingTime={readingTime} 
+  headings={headings}
+>
+  <h2 id="objeto">1. Objeto del Sitio</h2>
+  <p>
+    El sitio web <a href="https://adrianmorado-blog.vercel.app">adrianmorado-blog.vercel.app</a> es una plataforma de portafolio y blog técnico creada por <strong>César Adrián Morado</strong>. El propósito de este sitio es presentar proyectos personales y profesionales en desarrollo de software, así como publicar tutoriales y guías sobre tecnologías frontend (Angular, React, Vue, Astro, TypeScript, JavaScript).
+  </p>
+  <p>
+    Al acceder y navegar por este sitio, aceptas de forma voluntaria y sin reservas cumplir con los términos y condiciones estipulados en este documento.
+  </p>
+
+  <h2 id="uso-permitido">2. Uso Permitido</h2>
+  <p>
+    Te comprometes a utilizar el sitio web de conformidad con la ley, la moral, las buenas costumbres y el orden público. Queda estrictamente prohibido:
+  </p>
+  <ul>
+    <li>Realizar cualquier acción que dañe, inutilice o sobrecargue los servidores, la infraestructura de hosting o las redes conectadas a la plataforma.</li>
+    <li>Intentar acceder sin autorización a secciones protegidas del sitio, bases de datos o cuentas de correo del administrador.</li>
+    <li>Utilizar bots, scrapers o cualquier sistema automatizado para extraer código, artículos o material multimedia sin consentimiento expreso por escrito.</li>
+  </ul>
+
+  <h2 id="propiedad-intelectual">3. Propiedad Intelectual</h2>
+  <p>
+    Todo el contenido del sitio, incluyendo textos, artículos del blog, diseños de interfaz, gráficos, logotipos, imágenes y la estructura general, es propiedad de César Adrián Morado o de sus respectivos licenciantes y está protegido por las leyes de propiedad intelectual internacionales.
+  </p>
+  <p>
+    <strong>Código fuente educativo:</strong> Los fragmentos de código compartidos en los artículos del blog técnico se proporcionan bajo licencia libre (MIT) para fines de aprendizaje y uso en proyectos propios. Sin embargo, no se permite la copia íntegra y redistribución comercial del diseño de este portafolio ni de los artículos del blog sin atribución expresa.
+  </p>
+
+  <h2 id="contenido-educativo">4. Naturaleza del Contenido</h2>
+  <p>
+    El contenido de este blog técnico se publica exclusivamente con fines didácticos, informativos y de demostración de habilidades. Aunque nos esforzamos por publicar explicaciones rigurosas, guías prácticas actualizadas y código funcional con base en estándares de Angular, React o Astro, no podemos garantizar la infalibilidad absoluta de la información compartida ni su aplicabilidad directa en entornos de producción sin revisión previa.
+  </p>
+
+  <h2 id="responsabilidad">5. Limitación de Responsabilidad</h2>
+  <p>
+    César Adrián Morado no se hace responsable por:
+  </p>
+  <ul>
+    <li>Pérdidas de información, daños de hardware o caídas de producción derivados del uso o aplicación del código y las metodologías explicadas en los artículos de este sitio.</li>
+    <li>Fallas temporales en la disponibilidad de la web debido a problemas de hosting de Vercel, mantenimiento de servidores o causas de fuerza mayor fuera de nuestro control.</li>
+  </ul>
+
+  <h2 id="enlaces-externos">6. Enlaces a Terceros</h2>
+  <p>
+    Nuestros artículos y proyectos pueden contener enlaces a sitios web de terceros (como repositorios de GitHub, documentación oficial de frameworks, videos de YouTube, perfiles profesionales, etc.). No controlamos el contenido, las políticas de cookies ni las prácticas de privacidad de dichos sitios, por lo que no asumimos responsabilidad alguna por tu navegación en ellos.
+  </p>
+
+  <h2 id="cambios">7. Modificaciones del Sitio</h2>
+  <p>
+    Nos reservamos el derecho de modificar, actualizar, suspender o retirar de forma temporal o definitiva cualquier sección del sitio web o su contenido sin previo aviso. Asimismo, estos Términos y Condiciones pueden actualizarse periódicamente para adaptarse a nuevas regulaciones o cambios técnicos en la plataforma.
+  </p>
+
+  <h2 id="legislacion">8. Legislación Aplicable</h2>
+  <p>
+    Para la resolución de todas las disputas, controversias o reclamaciones que se deriven del uso de este sitio web, se aplicará la legislación de los Estados Unidos Mexicanos (México), específicamente bajo la jurisdicción de los tribunales competentes de Celaya, Guanajuato, renunciando a cualquier otro fuero que pudiera corresponder por domicilio.
+  </p>
+
+  <h2 id="contacto">9. Contacto</h2>
+  <p>
+    Para resolver dudas relacionadas con estos Términos y Condiciones o reportar fallos técnicos del sitio, por favor contáctame a:
+  </p>
+  <p>
+    📧 <strong>moradoadrian@gmail.com</strong>
+  </p>
+</LegalLayout>

@@ -1,0 +1,104 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+
+const title = 'Política de Privacidad';
+const description = 'Transparencia total sobre el tratamiento de tus datos personales, almacenamiento de información y cookies publicitarias en nuestro sitio.';
+const lastUpdated = '9 de julio, 2026';
+const readingTime = '3 min';
+
+const headings = [
+  { slug: 'introduccion', text: '1. Introducción', depth: 2 },
+  { slug: 'informacion-recopilada', text: '2. Información Recopilada', depth: 2 },
+  { slug: 'google-adsense', text: '3. Google AdSense y Cookies', depth: 2 },
+  { slug: 'youtube', text: '4. Integración con YouTube', depth: 2 },
+  { slug: 'uso-informacion', text: '5. Uso de la Información', depth: 2 },
+  { slug: 'seguridad', text: '6. Seguridad de los Datos', depth: 2 },
+  { slug: 'derechos-usuario', text: '7. Derechos del Usuario', depth: 2 },
+  { slug: 'contacto', text: '8. Contacto Legal', depth: 2 }
+];
+---
+
+<LegalLayout 
+  title={title} 
+  description={description} 
+  lastUpdated={lastUpdated} 
+  readingTime={readingTime} 
+  headings={headings}
+>
+  <h2 id="introduccion">1. Introducción</h2>
+  <p>
+    El presente sitio web es un portafolio profesional y blog técnico operado por <strong>César Adrián Morado</strong>, con domicilio en Celaya, Guanajuato, México. Este espacio digital tiene como finalidad principal compartir contenido educativo, tutoriales y guías sobre desarrollo frontend moderno, abarcando tecnologías como Angular, React, Vue, Astro, TypeScript y JavaScript.
+  </p>
+  <p>
+    Valoramos tu privacidad y estamos comprometidos a ser completamente transparentes sobre cómo se recopilan y gestionan tus datos cuando navegas por nuestro sitio.
+  </p>
+
+  <h2 id="informacion-recopilada">2. Información Recopilada</h2>
+  <p>
+    Este sitio web recopila información a través de tres vías principales:
+  </p>
+  <ul>
+    <li>
+      <strong>Información facilitada directamente:</strong> Datos que tú nos envías de forma voluntaria al completar el formulario de contacto (como tu nombre, dirección de correo electrónico y el mensaje).
+    </li>
+    <li>
+      <strong>Datos estadísticos y de rendimiento:</strong> Información de navegación anónima recopilada automáticamente mediante herramientas analíticas orientadas a analizar el rendimiento del sitio (cuando estén activas).
+    </li>
+    <li>
+      <strong>Cookies técnicas e identidades de terceros:</strong> Cookies depositadas por servicios de terceros esenciales para el funcionamiento o monetización del blog, como Google AdSense.
+    </li>
+  </ul>
+
+  <h2 id="google-adsense">3. Google AdSense y Cookies</h2>
+  <p>
+    En este sitio se utiliza <strong>Google AdSense</strong> para mostrar anuncios publicitarios a los usuarios una vez que el sitio sea plenamente aprobado. Google, como proveedor externo, utiliza cookies para publicar anuncios basados en las visitas previas que un usuario realiza a este u otros sitios web.
+  </p>
+  <p>
+    Los usuarios pueden inhabilitar la publicidad personalizada accediendo a la configuración de anuncios de su cuenta de Google. También puedes consultar la <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Política de Privacidad de Anuncios de Google</a> para obtener información más detallada sobre cómo Google gestiona los datos de publicidad.
+  </p>
+
+  <h2 id="youtube">4. Integración con YouTube</h2>
+  <p>
+    Algunos artículos del blog técnico incluyen demostraciones interactivas o tutoriales en video integrados mediante el reproductor oficial de <strong>YouTube</strong>. Al reproducir estos contenidos, YouTube puede almacenar cookies y recopilar información de uso conforme a su propia política de privacidad.
+  </p>
+  <p>
+    Aclaramos que no alojamos archivos de video propios en nuestros servidores; todas las integraciones son incrustaciones en línea bajo la política de uso compartido de YouTube (Google LLC).
+  </p>
+
+  <h2 id="uso-informacion">5. Uso de la Información</h2>
+  <p>
+    Toda la información personal recopilada será utilizada estrictamente para los siguientes fines:
+  </p>
+  <ul>
+    <li>Responder consultas, propuestas de proyectos y mensajes de retroalimentación recibidos en el formulario de contacto.</li>
+    <li>Optimizar los tiempos de carga, detectar errores técnicos y mejorar el contenido del blog.</li>
+    <li>Cumplir con requerimientos legales o de seguridad informática de carácter obligatorio.</li>
+  </ul>
+  <p>
+    Bajo ninguna circunstancia vendemos, alquilamos ni compartimos tus datos personales con terceros para fines comerciales o de marketing ajenos a este sitio.
+  </p>
+
+  <h2 id="seguridad">6. Seguridad de los Datos</h2>
+  <p>
+    Nos tomamos la seguridad muy en serio. Implementamos medidas técnicas y organizativas adecuadas para proteger tus datos personales, incluyendo la encriptación de datos en tránsito a través de protocolos seguros HTTPS (SSL), cortafuegos de aplicaciones web y restricciones de acceso para asegurar que nadie no autorizado acceda a tus mensajes.
+  </p>
+
+  <h2 id="derechos-usuario">7. Derechos del Usuario</h2>
+  <p>
+    De acuerdo con las normativas locales e internacionales de protección de datos, tienes derecho a ejercer tus derechos ARCO en cualquier momento:
+  </p>
+  <ul>
+    <li><strong>Acceso:</strong> Solicitar conocer qué datos personales tenemos tuyos.</li>
+    <li><strong>Rectificación:</strong> Solicitar la corrección de datos incorrectos o incompletos.</li>
+    <li><strong>Eliminación:</strong> Solicitar que borremos tus mensajes o datos de contacto de nuestros registros.</li>
+    <li><strong>Oposición:</strong> Oponerte al tratamiento de tus datos para fines específicos.</li>
+  </ul>
+
+  <h2 id="contacto">8. Contacto Legal</h2>
+  <p>
+    Para cualquier consulta, queja o solicitud relacionada con esta Política de Privacidad o el tratamiento de tus datos personales, puedes escribir directamente a la siguiente dirección de correo electrónico:
+  </p>
+  <p>
+    📧 <strong>moradoadrian@gmail.com</strong>
+  </p>
+</LegalLayout>

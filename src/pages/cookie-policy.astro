@@ -1,0 +1,81 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+
+const title = 'Política de Cookies';
+const description = 'Información detallada sobre el uso de cookies propias y de terceros, su finalidad y cómo administrarlas en tu navegador.';
+const lastUpdated = '9 de julio, 2026';
+const readingTime = '3 min';
+
+const headings = [
+  { slug: 'que-son', text: '1. ¿Qué son las Cookies?', depth: 2 },
+  { slug: 'tipos', text: '2. Tipos de Cookies que Utiliza el Sitio', depth: 2 },
+  { slug: 'cookies-tecnicas', text: '3. Cookies Técnicas y de Preferencia', depth: 2 },
+  { slug: 'cookies-analisis', text: '4. Cookies de Análisis y Rendimiento', depth: 2 },
+  { slug: 'cookies-publicitarias', text: '5. Cookies Publicitarias (Google AdSense)', depth: 2 },
+  { slug: 'cookies-youtube', text: '6. Cookies de Terceros (YouTube)', depth: 2 },
+  { slug: 'desactivar', text: '7. Cómo Desactivar o Gestionar las Cookies', depth: 2 }
+];
+---
+
+<LegalLayout 
+  title={title} 
+  description={description} 
+  lastUpdated={lastUpdated} 
+  readingTime={readingTime} 
+  headings={headings}
+>
+  <h2 id="que-son">1. ¿Qué son las Cookies?</h2>
+  <p>
+    Una cookie es un pequeño archivo de texto que un sitio web descarga en tu ordenador, smartphone o cualquier otro dispositivo de navegación cuando accedes a él. Las cookies permiten que el sitio web reconozca tus preferencias de navegación, recuerde configuraciones y compile datos analíticos sobre tus interacciones para ofrecerte una experiencia fluida.
+  </p>
+
+  <h2 id="tipos">2. Tipos de Cookies que Utiliza el Sitio</h2>
+  <p>
+    Esta plataforma utiliza cookies propias y de terceros esenciales para proveer sus servicios. Ninguna de nuestras cookies propias recopila ni almacena información personal sensible. Se agrupan bajo las siguientes clasificaciones:
+  </p>
+
+  <h2 id="cookies-tecnicas">3. Cookies Técnicas y de Preferencia</h2>
+  <p>
+    Son cookies estrictamente necesarias para el correcto funcionamiento del portafolio. Permiten la navegación fluida, la correcta carga de fuentes web personalizadas (como Atkinson Hyperlegible), el funcionamiento del menú de navegación interactivo para dispositivos móviles y la persistencia de las animaciones fluidas configuradas mediante GSAP y Lenis.
+  </p>
+
+  <h2 id="cookies-analisis">4. Cookies de Análisis y Rendimiento</h2>
+  <p>
+    Estas cookies (que se activan bajo herramientas de análisis de rendimiento) nos ayudan a comprender cómo interactúan los lectores con los artículos del blog técnico. Recopilan datos anónimos como la cantidad de visitas, el tiempo de permanencia en las lecturas, qué frameworks (Angular, React, Astro) despiertan más interés y posibles errores técnicos de carga en diferentes dispositivos.
+  </p>
+
+  <h2 id="cookies-publicitarias">5. Cookies Publicitarias (Google AdSense)</h2>
+  <p>
+    Al integrar <strong>Google AdSense</strong> en nuestro blog técnico, Google y sus socios publicitarios utilizan cookies de terceros para servir anuncios basados en tu comportamiento e intereses en la red.
+  </p>
+  <p>
+    La cookie de DoubleClick de Google, por ejemplo, permite mostrar publicidad relevante y personalizada según tus búsquedas de temas de desarrollo de software o navegación en este sitio. Puedes inhabilitar las cookies de publicidad personalizada a través de la configuración de anuncios de Google o mediante plataformas internacionales de control de publicidad como <a href="https://optout.aboutads.info" target="_blank" rel="noopener noreferrer">AboutAds</a>.
+  </p>
+
+  <h2 id="cookies-youtube">6. Cookies de Terceros (YouTube)</h2>
+  <p>
+    Debido a que integramos videos educativos mediante el reproductor oficial de YouTube en el blog, este servicio de terceros puede depositar cookies en tu dispositivo para recordar tus preferencias de volumen, contar visualizaciones, almacenar historiales de reproducción o perfilar anuncios en sus propios sistemas cuando decides reproducir un video incrustado.
+  </p>
+
+  <h2 id="desactivar">7. Cómo Desactivar o Gestionar las Cookies</h2>
+  <p>
+    Tienes el control absoluto sobre las cookies de tu dispositivo. Puedes permitir, bloquear o eliminar las cookies instaladas en tu equipo configurando las opciones de tu navegador web. A continuación, te compartimos enlaces oficiales para configurar cookies en los navegadores más populares:
+  </p>
+  <ul>
+    <li>
+      <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Google Chrome</a>
+    </li>
+    <li>
+      <a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a>
+    </li>
+    <li>
+      <a href="https://support.apple.com/es-mx/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer">Apple Safari</a>
+    </li>
+    <li>
+      <a href="https://support.microsoft.com/es-es/microsoft-edge/eliminar-y-administrar-cookies-168dab11-0753-043d-7c16-ede5947fc64d" target="_blank" rel="noopener noreferrer">Microsoft Edge</a>
+    </li>
+  </ul>
+  <p>
+    <em>Nota: Si decides desactivar por completo las cookies publicitarias y de terceros, seguirás teniendo acceso al contenido técnico del blog, pero es posible que algunas incrustaciones interactivas o de video no funcionen de manera óptima.</em>
+  </p>
+</LegalLayout>

@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const documents = [
+  {
+    title: 'Política de Privacidad',
+    description: 'Conoce cómo tratamos tus datos personales, qué información recopilamos y cómo la protegemos de forma transparente.',
+    href: '/privacy-policy',
+    icon: '🛡️',
+    glow: 'hover:border-primary hover:shadow-[0_0_30px_rgba(109,94,249,0.2)]',
+    btnBg: 'bg-primary/20 text-accent border-primary/30 hover:bg-primary hover:text-white'
+  },
+  {
+    title: 'Términos y Condiciones',
+    description: 'Revisa las normas y condiciones generales que rigen el uso del sitio, la propiedad intelectual y nuestras exenciones de responsabilidad.',
+    href: '/terms-and-conditions',
+    icon: '⚖️',
+    glow: 'hover:border-secondary hover:shadow-[0_0_30px_rgba(139,92,246,0.2)]',
+    btnBg: 'bg-secondary/20 text-white border-secondary/30 hover:bg-secondary'
+  },
+  {
+    title: 'Política de Cookies',
+    description: 'Información detallada sobre las cookies técnicas, de análisis y de terceros (como Google AdSense y YouTube) que utiliza nuestro sitio.',
+    href: '/cookie-policy',
+    icon: '🍪',
+    glow: 'hover:border-accent hover:shadow-[0_0_30px_rgba(0,212,255,0.2)]',
+    btnBg: 'bg-accent/15 text-accent border-accent/20 hover:bg-accent hover:text-bg-dark'
+  },
+  {
+    title: 'Contacto',
+    description: 'Ponte en contacto para consultas profesionales, oportunidades de proyectos, o preguntas técnicas sobre desarrollo Frontend.',
+    href: '/contact',
+    icon: '✉️',
+    glow: 'hover:border-white/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]',
+    btnBg: 'bg-white/5 text-white border-white/10 hover:bg-white hover:text-bg-dark'
+  }
+];
+---
+
+<Layout title="Centro Legal | César Adrián Morado" description="Información y documentos sobre privacidad, cookies, términos de uso del portafolio y datos de contacto de César Adrián Morado.">
+  <main class="min-h-screen pt-32 pb-24 px-4 relative overflow-hidden">
+    <!-- Glow backgrounds -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto space-y-16 relative z-10">
+      
+      <!-- Breadcrumbs -->
+      <nav class="text-xs sm:text-sm text-text-muted flex items-center gap-2 select-none" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-accent transition-colors duration-200">Inicio</a>
+        <span>/</span>
+        <span class="text-white font-medium">Centro Legal</span>
+      </nav>
+
+      <!-- Hero Header -->
+      <div class="text-center max-w-3xl mx-auto space-y-4">
+        <h1 class="text-4xl sm:text-6xl font-display font-bold text-white tracking-tight leading-none">
+          Centro <span class="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Legal</span>
+        </h1>
+        <p class="text-text-muted text-base sm:text-xl font-sans max-w-2xl mx-auto">
+          Información legal transparente sobre la privacidad, el uso de cookies, condiciones de uso y contacto directo del sitio.
+        </p>
+        <div class="w-24 h-1 bg-gradient-to-r from-primary via-secondary to-accent mx-auto rounded-full mt-6"></div>
+      </div>
+
+      <!-- Card Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {documents.map((doc) => (
+          <div class={`glass-card p-8 rounded-3xl border border-white/5 bg-card-dark/40 flex flex-col justify-between space-y-6 group transition-all duration-500 hover:-translate-y-1.5 ${doc.glow}`}>
+            <div class="space-y-4">
+              <!-- Icon bubble -->
+              <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-3xl select-none group-hover:scale-110 group-hover:bg-white/10 transition-all duration-300 border border-white/10 shadow-inner">
+                {doc.icon}
+              </div>
+              
+              <h2 class="text-xl sm:text-2xl font-display font-bold text-white group-hover:text-accent transition-colors duration-300">
+                {doc.title}
+              </h2>
+              
+              <p class="text-text-muted text-sm sm:text-base font-sans leading-relaxed">
+                {doc.description}
+              </p>
+            </div>
+
+            <div class="pt-2">
+              <a 
+                href={doc.href} 
+                class={`inline-flex items-center justify-center px-6 py-2.5 rounded-xl border font-bold text-sm tracking-wide transition-all duration-300 cursor-pointer ${doc.btnBg}`}
+              >
+                Leer documento &rarr;
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Footer Info Box -->
+      <div class="max-w-3xl mx-auto text-center border-t border-white/10 pt-10">
+        <p class="text-xs text-text-muted font-sans">
+          Estos documentos legales aplican al sitio web alojado en <a href="https://adrianmorado-blog.vercel.app" target="_blank" class="text-accent underline hover:text-primary">adrianmorado-blog.vercel.app</a>. Desarrollado con el objetivo de compartir contenido educativo y demostraciones técnicas sobre Angular, React, Vue, Astro, TypeScript y tecnologías frontend.
+        </p>
+      </div>
+
+    </div>
+  </main>
+</Layout>

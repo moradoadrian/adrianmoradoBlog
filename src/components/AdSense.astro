@@ -1,0 +1,31 @@
+---
+interface Props {
+  slot: string;
+  format?: string;
+  responsive?: boolean;
+}
+
+const { slot, format = 'auto', responsive = true } = Astro.props;
+---
+
+<!-- 
+  Futuro Bloque de Google AdSense.
+  Deshabilitado temporalmente hasta que el sitio sea aprobado por Google AdSense.
+  
+  Para activarlo en el futuro, descomenta el bloque inferior:
+  
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-4083144926619606"
+       data-ad-slot={slot}
+       data-ad-format={format}
+       data-full-width-responsive={responsive ? "true" : "false"}></ins>
+  <script is:inline>
+       try {
+         (adsbygoogle = window.adsbygoogle || []).push({});
+       } catch (e) {
+         console.error('Error al cargar adsbygoogle', e);
+       }
+  </script>
+-->
+<div class="adsense-placeholder" data-slot={slot} style="display:none;"></div>
