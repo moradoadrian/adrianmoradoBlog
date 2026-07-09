@@ -1,0 +1,645 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Layout from './Layout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: any;
+  tags?: string[];
+  headings?: Heading[];
+  id: string;
+  body?: string;
+  category?: string;
+  difficulty?: 'Fácil' | 'Intermedio' | 'Avanzado';
+  views?: number;
+  author?: {
+    name: string;
+    avatar: string;
+  };
+  series?: {
+    id: 'angular' | 'react' | 'vue' | 'astro';
+    step: number;
+    title: string;
+  };
+}
+
+const { 
+  title, 
+  description, 
+  pubDate, 
+  updatedDate, 
+  heroImage, 
+  tags = [], 
+  headings = [], 
+  id, 
+  body = '',
+  category = 'General',
+  difficulty = 'Intermedio',
+  views = 120,
+  author = { name: 'César Adrián Morado', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Cesar' },
+  series
+} = Astro.props;
+
+// Calculate reading time
+const words = body.trim().split(/\s+/).length;
+const readingTime = Math.max(1, Math.ceil(words / 200));
+
+// Find related articles (overlapping tags or same category, up to 3)
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((p) => p.id !== id)
+  .map((p) => {
+    let score = 0;
+    if (p.data.category === category) score += 3;
+    const overlaps = p.data.tags?.filter((t) => tags.includes(t)).length || 0;
+    score += overlaps;
+    return { post: p, score };
+  })
+  .filter((x) => x.score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map((x) => x.post);
+---
+
+<Layout title={`${title} | Blog César`} description={description}>
+  <!-- Schema.org JSON-LD Structured Data -->
+  <script type="application/ld+json" is:inline define:vars={{ title, description, pubDate, updatedDate, author: author.name, category }}>
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": title,
+      "description": description,
+      "datePublished": pubDate,
+      "dateModified": updatedDate || pubDate,
+      "articleSection": category,
+      "author": {
+        "@type": "Person",
+        "name": author
+      }
+    }
+  </script>
+
+  <main class="min-h-screen pt-32 pb-16 px-4 max-w-7xl mx-auto relative overflow-hidden" id="blog-post-root">
+    <!-- Glow effect background -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[180px] pointer-events-none"></div>
+
+    <!-- Floating Back to Top Button -->
+    <button 
+      id="back-to-top" 
+      class="fixed bottom-6 right-6 p-3 rounded-full bg-primary hover:bg-primary/80 border border-primary/20 text-white shadow-lg cursor-pointer transform translate-y-24 opacity-0 transition-all duration-300 z-50 hover:shadow-[0_0_15px_rgba(109,94,249,0.5)]" 
+      aria-label="Volver arriba"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-5 h-5">
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
+    </button>
+
+    <!-- Breadcrumbs Navigation -->
+    <nav class="max-w-6xl mx-auto mb-6 text-xs sm:text-sm text-text-muted flex items-center gap-2 select-none" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-accent transition-colors duration-200">Inicio</a>
+      <span>/</span>
+      <a href="/blog" class="hover:text-accent transition-colors duration-200">Blog</a>
+      <span>/</span>
+      <span class="text-white font-medium truncate max-w-[200px] sm:max-w-xs">{title}</span>
+    </nav>
+
+    <article class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
+      
+      <!-- Sticky Sidebar: Share & Reading Mode Controls -->
+      <aside class="hidden lg:flex lg:col-span-1 flex-col items-center gap-6 sticky top-32 h-fit" id="article-controls-sidebar">
+        <!-- Reading Mode -->
+        <button 
+          id="toggle-read-mode" 
+          class="w-12 h-12 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-colors duration-300 cursor-pointer" 
+          title="Modo Lectura"
+          aria-label="Alternar modo lectura"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-5 h-5">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+        </button>
+
+        <div class="w-px h-8 bg-white/10"></div>
+
+        <!-- Share Actions -->
+        <span class="text-[10px] font-bold text-text-muted uppercase tracking-wider vertical-text select-none">Compartir</span>
+        
+        <!-- Share X -->
+        <a 
+          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(Astro.url.href)}`} 
+          target="_blank" 
+          class="w-10 h-10 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-all duration-300"
+          title="Compartir en X"
+          aria-label="Compartir en X"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+
+        <!-- Share LinkedIn -->
+        <a 
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`} 
+          target="_blank" 
+          class="w-10 h-10 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-all duration-300"
+          title="Compartir en LinkedIn"
+          aria-label="Compartir en LinkedIn"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+
+        <!-- Copy Link -->
+        <button 
+          id="copy-article-link" 
+          class="w-10 h-10 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-all duration-300 cursor-pointer"
+          title="Copiar Enlace"
+          aria-label="Copiar enlace del artículo"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <span class="text-[9px] text-[#27c93f] absolute -bottom-5 opacity-0 transition-opacity duration-300 font-bold" id="copy-toast">Copiado</span>
+        </button>
+      </aside>
+
+      <!-- Center: Main Article Container -->
+      <div class="lg:col-span-8 space-y-8" id="article-body-wrapper">
+        
+        <!-- Article Header Info -->
+        <div class="space-y-4">
+          <!-- Categories & Tags -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-xs font-semibold text-accent uppercase tracking-wider">{category}</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-text-muted uppercase tracking-wider flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{difficulty}
+            </span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight leading-tight" id="article-title">
+            {title}
+          </h1>
+
+          <!-- Author Info & Meta -->
+          <div class="flex flex-wrap items-center justify-between gap-4 border-y border-white/10 py-4 mt-2">
+            <div class="flex items-center gap-3">
+              <img src={author.avatar} alt={author.name} class="w-10 h-10 rounded-full border border-white/10" />
+              <div>
+                <div class="text-sm font-semibold text-white">{author.name}</div>
+                <div class="text-xs text-text-muted">Autor Técnico</div>
+              </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-muted">
+              <span>Publicado: <FormattedDate date={pubDate} /></span>
+              <span>&bull;</span>
+              <span>{readingTime} min lectura</span>
+              <span>&bull;</span>
+              <span>👁️ {views} vistas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Series Learning Path Box -->
+        {series && (
+          <div class="glass-card border border-primary/20 rounded-2xl p-5 bg-primary/5 space-y-3" id="series-box">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">📚</span>
+                <span class="text-sm font-display font-bold text-white">Serie: Ruta de Aprendizaje {series.id.toUpperCase()}</span>
+              </div>
+              <span class="text-xs px-2.5 py-0.5 rounded bg-primary/20 border border-primary/30 text-accent font-semibold">Paso {series.step}</span>
+            </div>
+            
+            <div class="border-t border-white/5 pt-3">
+              <p class="text-xs text-text-muted mb-3">Estás en el paso: <strong class="text-white">{series.title}</strong></p>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[10px] sm:text-xs">
+                <div class="p-2 rounded bg-bg-dark/40 border border-white/5 text-text-muted select-none">1. Introducción</div>
+                <div class="p-2 rounded bg-bg-dark/40 border border-white/5 text-text-muted select-none">...</div>
+                <div class="p-2 rounded bg-primary/20 border border-primary/40 text-white font-bold select-none">{series.step}. {series.title}</div>
+                <div class="p-2 rounded bg-bg-dark/40 border border-white/5 text-text-muted select-none">Siguiente Paso &rarr;</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- Article Image -->
+        {heroImage && (
+          <div class="relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <Image width={1020} height={510} src={heroImage} alt={title} class="w-full h-full object-cover" />
+          </div>
+        )}
+
+        <!-- Article Prose Content -->
+        <div class="prose max-w-none text-text-muted font-sans text-base sm:text-lg leading-relaxed space-y-6" id="post-content">
+          <slot />
+        </div>
+
+        <!-- Tags List at bottom -->
+        {tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 pt-6 border-t border-white/10">
+            <span class="text-sm text-text-muted self-center mr-2">Etiquetas:</span>
+            {tags.map((tag) => (
+              <span class="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-xs font-semibold text-text-muted hover:text-white cursor-pointer transition-colors duration-200">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <!-- Giscus comments placeholder -->
+        <div class="border-t border-white/10 mt-16 pt-12 space-y-6" id="comments-section">
+          <h3 class="text-2xl font-display font-bold text-white">Comentarios</h3>
+          <div class="giscus my-4">
+            <div class="text-center py-8 text-text-muted text-sm border border-dashed border-white/10 rounded-2xl bg-card-dark/30 select-none">
+              <span class="block text-2xl mb-2">💬</span>
+              Estructura lista para integración de Giscus (comentarios vía GitHub Discussions).
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter Card -->
+        <div class="glass-panel p-6 sm:p-10 rounded-3xl mt-16 border border-white/10 shadow-2xl relative overflow-hidden text-center">
+          <div class="absolute -top-32 -left-32 w-64 h-64 bg-primary/10 rounded-full blur-[60px] pointer-events-none"></div>
+          <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-accent/10 rounded-full blur-[60px] pointer-events-none"></div>
+          <div class="relative z-10 max-w-md mx-auto space-y-4">
+            <span class="text-3xl select-none">✉️</span>
+            <h3 class="text-xl sm:text-2xl font-display font-bold text-white">Suscríbete al Newsletter</h3>
+            <p class="text-text-muted text-sm">Recibe consejos técnicos semanales sobre Angular, React, Astro y arquitectura Frontend directamente en tu correo.</p>
+            <form class="flex flex-col sm:flex-row gap-3 pt-2" onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte!'); this.reset();">
+              <input 
+                type="email" 
+                required 
+                placeholder="tu@correo.com" 
+                class="flex-grow px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-accent transition-colors duration-300 text-sm"
+              />
+              <button 
+                type="submit" 
+                class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm tracking-wide transition-all duration-300 transform hover:-translate-y-0.5 border border-primary/20 hover:border-accent cursor-pointer"
+              >
+                Suscribirse
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky Sidebar: Table of Contents -->
+      {headings.length > 0 && (
+        <aside class="hidden lg:block lg:col-span-3 sticky top-32 h-fit space-y-4" id="article-toc-sidebar">
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-text-muted border-b border-white/5 pb-2 select-none">Tabla de Contenidos</h4>
+          <nav class="space-y-2 text-sm max-h-[70vh] overflow-y-auto pr-2 scrollbar-none" id="toc-container">
+            {headings.map((h) => (
+              <a 
+                href={`#${h.slug}`} 
+                class="block text-text-muted hover:text-accent transition-colors duration-200 py-1 font-medium leading-snug border-l border-white/5 pl-3"
+                style={`padding-left: ${(h.depth - 1) * 12 + 12}px`}
+              >
+                {h.text}
+              </a>
+            ))}
+          </nav>
+        </aside>
+      )}
+    </article>
+
+    <!-- Related Articles Section -->
+    {relatedPosts.length > 0 && (
+      <section class="max-w-6xl mx-auto border-t border-white/15 mt-20 pt-12 space-y-8 relative z-10" id="related-articles-section">
+        <h3 class="text-2xl font-display font-bold text-white">Artículos Relacionados</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {relatedPosts.map((post) => (
+            <article class="glass-card rounded-2xl overflow-hidden group flex flex-col h-full shadow-md hover:shadow-[0_0_20px_rgba(0,212,255,0.1)]">
+              <!-- Image Link -->
+              <a href={`/blog/${post.id}/`} class="relative overflow-hidden aspect-video border-b border-white/5 block">
+                {post.data.heroImage && (
+                  <Image 
+                    width={500} 
+                    height={250} 
+                    src={post.data.heroImage} 
+                    alt={post.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  />
+                )}
+              </a>
+              <!-- Content -->
+              <div class="p-5 flex flex-col flex-grow space-y-3">
+                <span class="text-xs text-text-muted"><FormattedDate date={post.data.pubDate} /></span>
+                <a href={`/blog/${post.id}/`} class="block">
+                  <h4 class="font-display font-bold text-base text-white group-hover:text-accent transition-colors duration-300 line-clamp-2">
+                    {post.data.title}
+                  </h4>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</Layout>
+
+<script>
+  function setupArticleFeatures() {
+    // 1. Copy Link logic
+    const copyBtn = document.getElementById('copy-article-link');
+    const copyToast = document.getElementById('copy-toast');
+    
+    if (copyBtn && copyToast) {
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          copyToast.classList.remove('opacity-0');
+          setTimeout(() => {
+            copyToast.classList.add('opacity-0');
+          }, 2000);
+        });
+      });
+    }
+
+    // 2. Reading Mode toggle
+    const toggleBtn = document.getElementById('toggle-read-mode');
+    const bodyWrapper = document.getElementById('article-body-wrapper');
+    const tocSidebar = document.getElementById('article-toc-sidebar');
+    const relatedSection = document.getElementById('related-articles-section');
+
+    if (toggleBtn && bodyWrapper) {
+      let isReadMode = false;
+      toggleBtn.addEventListener('click', () => {
+        isReadMode = !isReadMode;
+        if (isReadMode) {
+          bodyWrapper.classList.remove('lg:col-span-8');
+          bodyWrapper.classList.add('lg:col-span-10', 'lg:col-start-2', 'max-w-3xl', 'mx-auto', 'read-mode-active');
+          toggleBtn.classList.add('text-accent', 'border-accent', 'scale-110');
+          
+          if (tocSidebar) tocSidebar.classList.add('lg:hidden');
+          if (relatedSection) relatedSection.classList.add('opacity-30');
+        } else {
+          bodyWrapper.classList.add('lg:col-span-8');
+          bodyWrapper.classList.remove('lg:col-span-10', 'lg:col-start-2', 'max-w-3xl', 'mx-auto', 'read-mode-active');
+          toggleBtn.classList.remove('text-accent', 'border-accent', 'scale-110');
+          
+          if (tocSidebar) tocSidebar.classList.remove('lg:hidden');
+          if (relatedSection) relatedSection.classList.remove('opacity-30');
+        }
+      });
+    }
+
+    // 3. Back to Top Button
+    const btt = document.getElementById('back-to-top');
+    if (btt) {
+      const handleScrollVisibility = () => {
+        if (window.scrollY > 400) {
+          btt.classList.remove('translate-y-24', 'opacity-0');
+        } else {
+          btt.classList.add('translate-y-24', 'opacity-0');
+        }
+      };
+      
+      window.addEventListener('scroll', handleScrollVisibility);
+      btt.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      document.addEventListener('astro:before-preparation', () => {
+        window.removeEventListener('scroll', handleScrollVisibility);
+      }, { once: true });
+    }
+
+    // 4. Scroll Spy for TOC
+    const headingsObserved = document.querySelectorAll('#post-content h2, #post-content h3');
+    const tocLinks = document.querySelectorAll('#toc-container a');
+    
+    if (headingsObserved.length && tocLinks.length) {
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -60% 0px',
+        threshold: 0
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            tocLinks.forEach(link => {
+              if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('text-accent', 'border-accent', 'pl-4');
+                link.classList.remove('text-text-muted', 'border-white/5');
+              } else {
+                link.classList.remove('text-accent', 'border-accent', 'pl-4');
+                link.classList.add('text-text-muted', 'border-white/5');
+              }
+            });
+          }
+        });
+      }, observerOptions);
+
+      headingsObserved.forEach(h => observer.observe(h));
+
+      document.addEventListener('astro:before-preparation', () => {
+        observer.disconnect();
+      }, { once: true });
+    }
+  }
+
+  // 5. Dynamic Mermaid Loader
+  async function initMermaid() {
+    const elements = document.querySelectorAll('.language-mermaid');
+    if (elements.length > 0) {
+      const { default: mermaid } = await import('mermaid');
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'dark',
+        securityLevel: 'loose',
+        themeVariables: {
+          background: '#0B1120',
+          primaryColor: '#6D5EF9',
+          primaryTextColor: '#FFFFFF',
+          lineColor: '#00D4FF'
+        }
+      });
+
+      elements.forEach(async (el, index) => {
+        const code = el.textContent || '';
+        const container = document.createElement('div');
+        container.className = 'mermaid-chart my-6 flex justify-center bg-card-dark p-6 rounded-2xl border border-white/10 overflow-x-auto';
+        container.id = `mermaid-${index}`;
+        
+        const preNode = el.parentElement;
+        if (preNode) {
+          preNode.parentElement?.replaceChild(container, preNode);
+          
+          try {
+            const { svg } = await mermaid.render(`mermaid-svg-${index}`, code);
+            container.innerHTML = svg;
+          } catch (err) {
+            console.error('Mermaid render error:', err);
+            container.textContent = 'Error rendering diagram.';
+          }
+        }
+      });
+    }
+  }
+
+  // Setup all triggers
+  const runAll = () => {
+    setupArticleFeatures();
+    initMermaid();
+  };
+
+  runAll();
+  document.addEventListener('astro:page-load', runAll);
+</script>
+
+<style>
+  /* Vertical Text for Sidebar */
+  .vertical-text {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  /* Custom styles for article content tags */
+  #post-content :global(h2) {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    scroll-margin-top: 120px; /* Offset for sticky header when linking */
+  }
+
+  #post-content :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    scroll-margin-top: 120px;
+  }
+
+  #post-content :global(p) {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+  }
+
+  #post-content :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  #post-content :global(a:hover) {
+    color: var(--color-primary);
+  }
+
+  #post-content :global(blockquote) {
+    border-left: 4px solid var(--color-accent);
+    background: rgba(109, 94, 249, 0.05);
+    padding: 1rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    margin: 1.5rem 0;
+    color: #ffffff;
+  }
+
+  #post-content :global(pre) {
+    background: #0B1120 !important;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 1.25rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  #post-content :global(code) {
+    font-family: monospace;
+    font-size: 0.9em;
+    background: rgba(255,255,255,0.08);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    color: #00D4FF;
+  }
+
+  #post-content :global(pre code) {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
+  }
+
+  #post-content :global(ul) {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  #post-content :global(ol) {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  #post-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  #post-content :global(table) {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  #post-content :global(th) {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.75rem 1rem;
+    font-weight: bold;
+    color: white;
+    text-align: left;
+  }
+
+  #post-content :global(td) {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.75rem 1rem;
+    color: #94A3B8;
+  }
+
+  #post-content :global(tr:nth-child(even)) {
+    background: rgba(255, 255, 255, 0.01);
+  }
+
+  /* Reading Mode Active styling modifiers */
+  .read-mode-active :global(h2),
+  .read-mode-active :global(h3) {
+    color: #00D4FF !important;
+  }
+  .read-mode-active {
+    color: #f1f5f9 !important;
+  }
+
+  /* Hide scrollbar for TOC sidebar container */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

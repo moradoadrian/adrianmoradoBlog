@@ -1,0 +1,57 @@
+---
+interface Props {
+  labels: string[];
+}
+const { labels = [] } = Astro.props;
+const uniqueId = Math.random().toString(36).substring(2, 9);
+---
+<div class="tabs-container my-6 glass-card rounded-2xl border border-white/10 overflow-hidden shadow-lg" data-id={uniqueId}>
+  <!-- Tab Header -->
+  <div class="flex border-b border-white/15 bg-bg-dark/40 px-4 py-2 gap-2 overflow-x-auto scrollbar-none">
+    {labels.map((label, idx) => (
+      <button 
+        class={`px-4 py-2 text-xs font-semibold rounded-lg cursor-pointer transition-all duration-300 select-none ${idx === 0 ? 'bg-primary text-white' : 'text-text-muted hover:text-white'}`}
+        data-index={idx}
+      >
+        {label}
+      </button>
+    ))}
+  </div>
+  
+  <!-- Tab Content Panels -->
+  <div class="p-6">
+    <slot />
+  </div>
+</div>
+
+<script>
+  function setupTabs() {
+    const containers = document.querySelectorAll('.tabs-container');
+    containers.forEach(container => {
+      const buttons = container.querySelectorAll('button');
+      const panels = container.querySelectorAll('.tab-panel');
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const index = parseInt(btn.getAttribute('data-index') || '0', 10);
+          
+          buttons.forEach(b => b.classList.remove('bg-primary', 'text-white'));
+          buttons.forEach(b => b.classList.add('text-text-muted', 'hover:text-white'));
+          btn.classList.add('bg-primary', 'text-white');
+          btn.classList.remove('text-text-muted', 'hover:text-white');
+
+          panels.forEach((panel, pIdx) => {
+            if (pIdx === index) {
+              panel.classList.remove('hidden');
+            } else {
+              panel.classList.add('hidden');
+            }
+          });
+        });
+      });
+    });
+  }
+
+  setupTabs();
+  document.addEventListener('astro:page-load', setupTabs);
+</script>

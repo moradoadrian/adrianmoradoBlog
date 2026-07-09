@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Sobre Mí | César Adrián Morado" description="Conoce más sobre la trayectoria, enfoque técnico y filosofía de desarrollo de César Adrián Morado.">
+  <main class="min-h-screen pt-32 pb-16 px-4 max-w-4xl mx-auto space-y-12 relative">
+    <!-- Glowing background lights -->
+    <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-accent/10 rounded-full blur-[80px] pointer-events-none"></div>
+
+    <div class="space-y-6 relative z-10">
+      <h1 class="text-4xl sm:text-5xl font-display font-bold text-white">
+        Sobre <span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Mí</span>
+      </h1>
+      <p class="text-accent font-display font-semibold text-lg">César Adrián Morado — Frontend Developer Senior</p>
+    </div>
+
+    <!-- Long-form content -->
+    <div class="space-y-8 text-text-muted text-lg leading-relaxed relative z-10">
+      <div class="glass-card p-6 sm:p-8 rounded-2xl space-y-4">
+        <h2 class="text-2xl font-display font-bold text-white">Mi Filosofía de Desarrollo</h2>
+        <p>
+          Creo firmemente que el frontend es el puente directo entre el usuario y la tecnología. Un código impecable no sirve si la experiencia de usuario es confusa, y un diseño espectacular falla si el sitio tarda 10 segundos en cargar.
+        </p>
+        <p>
+          Por ello, baso mi trabajo diario en tres pilares fundamentales: rendimiento técnico implacable (Core Web Vitals óptimos), modularidad y escalabilidad del código (TypeScript estructurado y arquitecturas basadas en componentes) y estética de interfaz de clase mundial.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <h2 class="text-2xl font-display font-bold text-white">Trayectoria y Metodología</h2>
+        <p>
+          A lo largo de mi carrera de más de 8 años, he trabajado en una amplia variedad de proyectos, desde complejas aplicaciones corporativas en Angular con arquitecturas de microfrontends hasta sitios web estáticos ultrarápidos construidos en Astro.
+        </p>
+        <p>
+          Mi flujo de trabajo integra herramientas de vanguardia como GSAP para micro-interacciones, Tailwind CSS para un diseño ágil y modular, y Git/GitHub para la colaboración y el versionado disciplinado. Además, tengo amplia experiencia consumiendo backend headless con Supabase y Firebase, lo que me permite crear soluciones full-stack robustas de manera eficiente.
+        </p>
+      </div>
+
+      <div class="glass-card p-6 sm:p-8 rounded-2xl">
+        <h3 class="text-xl font-display font-bold text-white mb-4">¿Por qué trabajar conmigo?</h3>
+        <ul class="space-y-3 list-disc pl-5">
+          <li><strong>Mentalidad de Producto:</strong> No solo escribo código, me involucro en la experiencia del usuario y los objetivos del negocio.</li>
+          <li><strong>Garantía de Rendimiento:</strong> Optimización de recursos, carga asíncrona y SEO técnico integrado desde el primer día.</li>
+          <li><strong>Comunicación Fluida:</strong> Trabajo ágil mediante Git estructurado, revisión de código constante y documentación clara.</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</Layout>

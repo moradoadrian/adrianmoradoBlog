@@ -1,0 +1,28 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+<details class="accordion-item my-4 glass-card border border-white/10 rounded-2xl overflow-hidden group shadow-md transition-all duration-300">
+  <summary class="flex justify-between items-center px-6 py-4 font-display font-semibold text-sm sm:text-base text-white hover:text-accent cursor-pointer select-none outline-none list-none [&::-webkit-details-marker]:hidden">
+    <span>{title}</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4 text-text-muted group-open:rotate-180 group-hover:text-accent transition-transform duration-300">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </summary>
+  <div class="px-6 pb-6 pt-2 text-text-muted text-sm sm:text-base border-t border-white/5 bg-bg-dark/20 leading-relaxed prose-direct">
+    <slot />
+  </div>
+</details>
+
+<style>
+  /* Custom summary style fallback for certain browsers */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  .prose-direct :global(p) {
+    margin-bottom: 0 !important;
+  }
+</style>

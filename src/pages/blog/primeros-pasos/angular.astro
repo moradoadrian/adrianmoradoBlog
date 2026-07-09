@@ -1,0 +1,155 @@
+---
+import PrimerosPasosLayout from '../../../layouts/PrimerosPasosLayout.astro';
+import YouTubeVideo from '../../../components/YouTubeVideo.astro';
+
+const title = 'Primeros pasos con Angular';
+const description = 'Guía de inicio rápido para aprender Angular desde cero. Instalación de Node.js, CLI, estructuras y primer hola mundo.';
+
+const headings = [
+  { slug: 'que-es-angular', text: '¿Qué es Angular?' },
+  { slug: 'para-que-sirve', text: '¿Para qué sirve?' },
+  { slug: 'ventajas-y-desventajas', text: 'Ventajas y Desventajas' },
+  { slug: 'requisitos', text: 'Requisitos previos' },
+  { slug: 'instalacion-nodejs', text: '1. Instalación de Node.js' },
+  { slug: 'instalacion-cli', text: '2. Instalación de Angular CLI' },
+  { slug: 'crear-proyecto', text: '3. Crear el primer proyecto' },
+  { slug: 'estructura', text: '4. Estructura de carpetas' },
+  { slug: 'ejecutar', text: '5. Ejecutar la aplicación' },
+  { slug: 'que-aprender-despues', text: '¿Qué aprender después?' },
+  { slug: 'curso-recomendado', text: 'Curso recomendado' }
+];
+---
+
+<PrimerosPasosLayout title={title} description={description} framework="angular" headings={headings}>
+  
+  <h2 id="que-es-angular">¿Qué es Angular?</h2>
+  <p>
+    Angular es un **framework de desarrollo web** de código abierto desarrollado y mantenido por Google. Está diseñado específicamente para construir aplicaciones de una sola página (Single Page Applications o SPA) dinámicas y robustas a gran escala. A diferencia de bibliotecas sencillas, Angular provee un kit completo de herramientas pre-configuradas para desarrollo Frontend profesional.
+  </p>
+
+  <h2 id="para-que-sirve">¿Para qué sirve?</h2>
+  <p>
+    Angular sirve para estructurar y acelerar el desarrollo de aplicaciones web empresariales. Al ofrecer un entorno de desarrollo estructurado con patrones de diseño estrictos (basados en la programación modular y componentes), es ideal para proyectos donde trabajan equipos numerosos y se requiere alta escalabilidad y fácil mantenimiento a largo plazo.
+  </p>
+
+  <h2 id="ventajas-y-desventajas">Ventajas y Desventajas</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+    <div class="p-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
+      <h3 class="text-emerald-400 font-bold text-sm uppercase tracking-wider mb-2">Ventajas</h3>
+      <ul class="list-disc pl-5 text-xs sm:text-sm space-y-1 text-text-muted">
+        <li><strong>Todo incluido:</strong> Enrutamiento, cliente HTTP, gestión de formularios, y validaciones integradas de fábrica.</li>
+        <li><strong>TypeScript nativo:</strong> Mayor control de tipos y autocompletado en el editor.</li>
+        <li><strong>Inyección de Dependencias:</strong> Arquitectura desacoplada y fácil de testear.</li>
+        <li><strong>Signals:</strong> Reactividad fina ultra rápida.</li>
+      </ul>
+    </div>
+    
+    <div class="p-5 rounded-xl border border-red-500/20 bg-red-500/5">
+      <h3 class="text-red-400 font-bold text-sm uppercase tracking-wider mb-2">Desventajas</h3>
+      <ul class="list-disc pl-5 text-xs sm:text-sm space-y-1 text-text-muted">
+        <li><strong>Curva de aprendizaje empinada:</strong> Muchos conceptos complejos iniciales (Módulos, Inyectores, RxJS).</li>
+        <li><strong>Peso inicial mayor:</strong> El tamaño del bundle básico suele superar al de React o Vue puro.</li>
+        <li><strong>Estructura rígida:</strong> Hay "una sola manera oficial" de hacer las cosas.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 id="requisitos">Requisitos previos</h2>
+  <p>
+    Antes de comenzar con Angular, asegúrate de tener una base sólida de:
+  </p>
+  <ul class="list-disc pl-6 space-y-1">
+    <li>HTML5 y CSS3 avanzados.</li>
+    <li>JavaScript moderno (ES6+) — variables, promesas, métodos de arrays.</li>
+    <li>Conocimiento general sobre qué es una Terminal o consola de comandos.</li>
+  </ul>
+
+  <!-- TIP Banner -->
+  <div class="my-6 p-5 rounded-2xl border border-accent/30 bg-accent/5 space-y-2">
+    <div class="flex items-center gap-2 font-display font-bold text-sm text-white select-none">
+      <span class="text-lg">🚀</span>
+      <span class="text-accent">Consejo de Preparación</span>
+    </div>
+    <p class="text-text-muted text-sm leading-relaxed m-0">
+      Angular utiliza **TypeScript** por defecto. Si nunca lo has usado, no te preocupes: TypeScript es simplemente JavaScript con tipos añadidos. La mayor parte de tu código de lógica inicial se verá idéntica a JavaScript estándar.
+    </p>
+  </div>
+
+  <h2 id="instalacion-nodejs">1. Instalación de Node.js</h2>
+  <p>
+    Angular requiere Node.js para ejecutar sus herramientas de compilación. Ve al sitio oficial de <a href="https://nodejs.org/" target="_blank">Node.js</a> y descarga la versión **LTS (Long Term Support)** recomendada.
+  </p>
+  <p>
+    Verifica que la instalación fue correcta abriendo tu terminal y ejecutando:
+  </p>
+  <pre><code>node -v
+npm -v</code></pre>
+
+  <h2 id="instalacion-cli">2. Instalación de Angular CLI</h2>
+  <p>
+    El **Angular CLI (Command Line Interface)** es la herramienta oficial de consola para crear, compilar y mantener aplicaciones Angular. Instálala globalmente usando npm:
+  </p>
+  <pre><code>npm install -g @angular/cli</code></pre>
+
+  <!-- Warning Banner -->
+  <div class="my-6 p-5 rounded-2xl border border-yellow-500/30 bg-yellow-500/5 space-y-2">
+    <div class="flex items-center gap-2 font-display font-bold text-sm text-white select-none">
+      <span class="text-lg">⚠️</span>
+      <span class="text-yellow-400">Permisos de Consola</span>
+    </div>
+    <p class="text-text-muted text-sm leading-relaxed m-0">
+      En sistemas Windows, es posible que PowerShell devuelva un error de restricciones de scripts al intentar correr comandos globales. Si sucede, ejecuta la consola como Administrador y corre el comando: <code>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code>.
+    </p>
+  </div>
+
+  <h2 id="crear-proyecto">3. Crear el primer proyecto</h2>
+  <p>
+    Utiliza el CLI para generar una nueva aplicación llamada <code>mi-primer-app</code>:
+  </p>
+  <pre><code>ng new mi-primer-app</code></pre>
+  <p>
+    La consola te preguntará qué formato de estilos prefieres (te recomiendo seleccionar **CSS** o **Sass**) y si deseas habilitar Server Side Rendering (puedes responder **No** para iniciar de manera sencilla).
+  </p>
+
+  <h2 id="estructura-oficial">4. Estructura de carpetas</h2>
+  <p>
+    Al abrir tu proyecto en VS Code, verás una estructura jerárquica. Las carpetas principales son:
+  </p>
+  <ul class="list-disc pl-6 space-y-1">
+    <li><code>src/app/</code>: Aquí reside todo tu código lógico (componentes, servicios, directivas).</li>
+    <li><code>src/main.ts</code>: El punto de arranque principal de la aplicación.</li>
+    <li><code>angular.json</code>: Archivo de configuración global del CLI y de assets.</li>
+    <li><code>package.json</code>: Gestión de dependencias externas.</li>
+  </ul>
+
+  <h2 id="ejecutar">5. Ejecutar la aplicación</h2>
+  <p>
+    Navega al directorio creado y levanta el servidor de desarrollo:
+  </p>
+  <pre><code>cd mi-primer-app
+ng serve -o</code></pre>
+  <p>
+    El flag <code>-o</code> abrirá automáticamente tu navegador predeterminado en <a href="http://localhost:4200/" target="_blank">http://localhost:4200/</a> mostrando la pantalla de bienvenida.
+  </p>
+
+  <h2 id="que-aprender-despues">¿Qué aprender después?</h2>
+  <p>
+    ¡Felicidades! Ya tienes tu primer proyecto funcionando. Para continuar tu camino hacia Frontend Senior con Angular, te sugiero explorar:
+  </p>
+  <ol class="list-decimal pl-6 space-y-1">
+    <li>Enlace de datos bidireccional (Two-way Data Binding).</li>
+    <li>Arquitectura de componentes e inyección de datos mediante <code>@Input</code> y <code>@Output</code>.</li>
+    <li>Conceptos modernos de reactividad usando <strong>Signals</strong> de Angular.</li>
+  </ol>
+
+  <hr class="border-white/10 my-8" />
+
+  <h2 id="curso-recomendado">Curso recomendado</h2>
+  <p>
+    Para guiarte de forma visual, te aconsejamos revisar esta excelente lección en video:
+  </p>
+
+  <YouTubeVideo videoId="f7unUpshmpA" title="Curso de Angular Completo para Principiantes" />
+
+</PrimerosPasosLayout>

@@ -1,0 +1,57 @@
+---
+interface Props {
+  type?: 'info' | 'warning' | 'tip' | 'error';
+  title?: string;
+}
+
+const { type = 'info', title } = Astro.props;
+
+const styles = {
+  info: {
+    bg: 'bg-primary/5',
+    border: 'border-primary/30',
+    text: 'text-primary',
+    icon: '💡',
+    defaultTitle: 'Nota'
+  },
+  warning: {
+    bg: 'bg-yellow-500/5',
+    border: 'border-yellow-500/30',
+    text: 'text-yellow-400',
+    icon: '⚠️',
+    defaultTitle: 'Advertencia'
+  },
+  tip: {
+    bg: 'bg-accent/5',
+    border: 'border-accent/30',
+    text: 'text-accent',
+    icon: '🚀',
+    defaultTitle: 'Consejo'
+  },
+  error: {
+    bg: 'bg-[#ff5f56]/5',
+    border: 'border-[#ff5f56]/30',
+    text: 'text-[#ff5f56]',
+    icon: '🛑',
+    defaultTitle: 'Importante'
+  }
+};
+
+const current = styles[type] || styles.info;
+---
+
+<div class={`my-6 p-5 rounded-2xl border ${current.bg} ${current.border} space-y-2`}>
+  <div class="flex items-center gap-2 font-display font-bold text-sm text-white select-none">
+    <span class="text-lg">{current.icon}</span>
+    <span class={current.text}>{title || current.defaultTitle}</span>
+  </div>
+  <div class="text-text-muted text-sm sm:text-base leading-relaxed prose-direct">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .prose-direct :global(p) {
+    margin-bottom: 0 !important;
+  }
+</style>

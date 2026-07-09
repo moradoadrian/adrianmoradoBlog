@@ -1,0 +1,300 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  framework: 'angular' | 'react' | 'vue';
+  headings: { slug: string; text: string }[];
+}
+
+const { title, description, framework, headings } = Astro.props;
+---
+
+<Layout title={`${title} | César Adrián Morado`} description={description}>
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json" is:inline define:vars={{ title, description }}>
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": title,
+      "description": description,
+      "author": {
+        "@type": "Person",
+        "name": "César Adrián Morado"
+      }
+    }
+  </script>
+
+  <main class="min-h-screen pt-32 pb-16 px-4 max-w-7xl mx-auto relative overflow-hidden" id="primeros-pasos-root">
+    <!-- Glow -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[180px] pointer-events-none"></div>
+
+    <!-- Breadcrumbs -->
+    <nav class="max-w-6xl mx-auto mb-6 text-xs sm:text-sm text-text-muted flex items-center gap-2 select-none" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-accent transition-colors duration-200">Inicio</a>
+      <span>/</span>
+      <a href="/blog" class="hover:text-accent transition-colors duration-200">Blog</a>
+      <span>/</span>
+      <span class="text-text-muted">Primeros Pasos</span>
+      <span>/</span>
+      <span class="text-white font-medium truncate max-w-[200px]">{framework.toUpperCase()}</span>
+    </nav>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
+      <!-- Left controls sidebar -->
+      <aside class="hidden lg:flex lg:col-span-1 flex-col items-center gap-6 sticky top-32 h-fit">
+        <a 
+          href="/blog" 
+          class="w-12 h-12 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-colors duration-300"
+          title="Volver al blog"
+          aria-label="Volver al blog"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-5 h-5">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
+
+        <div class="w-px h-8 bg-white/10"></div>
+
+        <span class="text-[10px] font-bold text-text-muted uppercase tracking-wider vertical-text select-none">Compartir</span>
+        
+        <!-- Share X -->
+        <a 
+          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(Astro.url.href)}`} 
+          target="_blank" 
+          class="w-10 h-10 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-all duration-300"
+          title="Compartir en X"
+          aria-label="Compartir en X"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+
+        <!-- Share LinkedIn -->
+        <a 
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`} 
+          target="_blank" 
+          class="w-10 h-10 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-all duration-300"
+          title="Compartir en LinkedIn"
+          aria-label="Compartir en LinkedIn"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+
+        <!-- Copy Link -->
+        <button 
+          id="copy-article-link" 
+          class="w-10 h-10 rounded-full glass-card border border-white/10 hover:border-accent flex items-center justify-center text-text-muted hover:text-accent transition-all duration-300 cursor-pointer"
+          title="Copiar Enlace"
+          aria-label="Copiar enlace"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <span class="text-[9px] text-[#27c93f] absolute -bottom-5 opacity-0 transition-opacity duration-300 font-bold" id="copy-toast">Copiado</span>
+        </button>
+      </aside>
+
+      <!-- Center Content -->
+      <div class="lg:col-span-8 space-y-8" id="article-body-wrapper">
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-xs font-semibold text-accent uppercase tracking-wider font-display">Primeros Pasos</span>
+            <span class="text-xs text-text-muted font-medium">Guía oficial &bull; 8 min lectura</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-display font-bold text-white tracking-tight leading-tight">
+            {title}
+          </h1>
+        </div>
+
+        <!-- Framework visual header -->
+        <div class="relative w-full h-[220px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-tr from-bg-dark to-card-dark flex items-center justify-center select-none">
+          <!-- Background grids and effects -->
+          <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+          <div class="absolute w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
+          <!-- Centered text logo -->
+          <span class="text-6xl sm:text-7xl font-display font-black tracking-widest bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(109,94,249,0.3)]">
+            {framework.toUpperCase()}
+          </span>
+        </div>
+
+        <hr class="border-white/15" />
+
+        <!-- Actual page content slot -->
+        <div class="prose max-w-none text-text-muted font-sans text-base sm:text-lg leading-relaxed space-y-6" id="post-content">
+          <slot />
+        </div>
+
+        <!-- Related articles future structure -->
+        <div class="border-t border-white/10 mt-16 pt-12 space-y-6">
+          <h3 class="text-xl font-display font-bold text-white">Artículos Relacionados</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="glass-card p-5 rounded-xl border border-white/5 opacity-50 flex flex-col justify-between h-28 select-none">
+              <span class="text-[9px] text-text-muted font-mono uppercase">Tema Siguiente</span>
+              <span class="text-white font-semibold text-sm">Conceptos de Arquitectura Avanzada</span>
+              <span class="text-xs text-accent">Próximamente</span>
+            </div>
+            <div class="glass-card p-5 rounded-xl border border-white/5 opacity-50 flex flex-col justify-between h-28 select-none">
+              <span class="text-[9px] text-text-muted font-mono uppercase">Herramientas</span>
+              <span class="text-white font-semibold text-sm">Configuración e Integración en VS Code</span>
+              <span class="text-xs text-accent">Próximamente</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right sidebar TOC -->
+      {headings.length > 0 && (
+        <aside class="hidden lg:block lg:col-span-3 sticky top-32 h-fit space-y-4">
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-text-muted border-b border-white/5 pb-2 select-none">Índice del Contenido</h4>
+          <nav class="space-y-2 text-sm max-h-[70vh] overflow-y-auto pr-2 scrollbar-none" id="toc-container">
+            {headings.map((h) => (
+              <a 
+                href={`#${h.slug}`} 
+                class="block text-text-muted hover:text-accent transition-colors duration-200 py-1 font-medium leading-snug border-l border-white/5 pl-3"
+              >
+                {h.text}
+              </a>
+            ))}
+          </nav>
+        </aside>
+      )}
+    </div>
+  </main>
+</Layout>
+
+<script>
+  function setupPrimerosPasos() {
+    // Copy link
+    const copyBtn = document.getElementById('copy-article-link');
+    const copyToast = document.getElementById('copy-toast');
+    if (copyBtn && copyToast) {
+      copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          copyToast.classList.remove('opacity-0');
+          setTimeout(() => {
+            copyToast.classList.add('opacity-0');
+          }, 2000);
+        });
+      });
+    }
+
+    // Scrollspy
+    const headingsObserved = document.querySelectorAll('#post-content h2, #post-content h3');
+    const tocLinks = document.querySelectorAll('#toc-container a');
+    
+    if (headingsObserved.length && tocLinks.length) {
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -60% 0px',
+        threshold: 0
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            tocLinks.forEach(link => {
+              if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('text-accent', 'border-accent', 'pl-4');
+                link.classList.remove('text-text-muted', 'border-white/5');
+              } else {
+                link.classList.remove('text-accent', 'border-accent', 'pl-4');
+                link.classList.add('text-text-muted', 'border-white/5');
+              }
+            });
+          }
+        });
+      }, observerOptions);
+
+      headingsObserved.forEach(h => observer.observe(h));
+    }
+  }
+
+  setupPrimerosPasos();
+  document.addEventListener('astro:page-load', setupPrimerosPasos);
+</script>
+
+<style>
+  .vertical-text {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+  }
+
+  /* Typography styles matching BlogPost layouts */
+  #post-content :global(h2) {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    scroll-margin-top: 120px;
+  }
+
+  #post-content :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    scroll-margin-top: 120px;
+  }
+
+  #post-content :global(p) {
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+  }
+
+  #post-content :global(ul) {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  #post-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  #post-content :global(pre) {
+    background: #0B1120 !important;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 1.25rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  #post-content :global(code) {
+    font-family: monospace;
+    font-size: 0.9em;
+    background: rgba(255,255,255,0.08);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    color: #00D4FF;
+  }
+
+  #post-content :global(pre code) {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

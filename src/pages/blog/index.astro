@@ -1,0 +1,537 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Identify featured posts vs regular posts
+const featuredPost = allPosts.find(post => post.data.featured) || allPosts[0];
+const regularPosts = allPosts.filter(post => post.id !== featuredPost?.id);
+
+// All unique categories requested by user
+const categoriesList = [
+  'Todos',
+  'Angular',
+  'React',
+  'Vue',
+  'Astro',
+  'JavaScript',
+  'TypeScript',
+  'CSS',
+  'Tailwind',
+  'UI/UX',
+  'Herramientas',
+  'Backend',
+  'DevOps'
+];
+
+// Gather unique tags
+const uniqueTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+
+// Function to calculate reading time
+const getReadingTime = (body: string | undefined) => {
+  if (!body) return 3;
+  const words = body.trim().split(/\s+/).length;
+  return Math.ceil(words / 200);
+};
+
+// Define the static series details
+const learningSeries = [
+  {
+    id: 'angular',
+    name: 'Angular Developer Path',
+    desc: 'Domina el framework corporativo de Google, desde componentes básicos hasta Signals y control de estado reactivo.',
+    steps: [
+      { name: 'Introducción', step: 1 },
+      { name: 'Componentes', step: 2 },
+      { name: 'Directivas', step: 3 },
+      { name: 'Servicios', step: 4 },
+      { name: 'Routing', step: 5 },
+      { name: 'Formularios', step: 6 },
+      { name: 'Signals', step: 7 },
+      { name: 'RxJS', step: 8 },
+      { name: 'Buenas prácticas', step: 9 }
+    ]
+  },
+  {
+    id: 'react',
+    name: 'React Advanced Track',
+    desc: 'Construye aplicaciones eficientes con Hooks avanzados, patrones de composición, Zustand y SSR con Next.js.',
+    steps: [
+      { name: 'JSX', step: 1 },
+      { name: 'Componentes', step: 2 },
+      { name: 'Hooks', step: 3 },
+      { name: 'Router', step: 4 },
+      { name: 'Context API', step: 5 },
+      { name: 'Zustand', step: 6 },
+      { name: 'Next.js', step: 7 }
+    ]
+  },
+  {
+    id: 'vue',
+    name: 'Vue.js Composition Path',
+    desc: 'Desde la sintaxis declarativa hasta Pinia y arquitecturas optimizadas para frameworks de SSR como Nuxt.',
+    steps: [
+      { name: 'Introducción', step: 1 },
+      { name: 'Composition API', step: 2 },
+      { name: 'Directivas', step: 3 },
+      { name: 'Pinia', step: 4 },
+      { name: 'Vue Router', step: 5 },
+      { name: 'Nuxt', step: 6 }
+    ]
+  },
+  {
+    id: 'astro',
+    name: 'Astro Web Architecture',
+    desc: 'Crea sitios orientados al contenido con excelente rendimiento SEO usando la arquitectura de islas e integración MDX.',
+    steps: [
+      { name: 'Instalación', step: 1 },
+      { name: 'Layouts', step: 2 },
+      { name: 'Content Collections', step: 3 },
+      { name: 'Islands', step: 4 },
+      { name: 'SEO', step: 5 },
+      { name: 'Deploy', step: 6 }
+    ]
+  }
+];
+
+// Helper to check if a step exists as a post in our collections
+const findPostForStep = (seriesId: string, stepNum: number) => {
+  return allPosts.find(p => p.data.series?.id === seriesId && p.data.series?.step === stepNum);
+};
+---
+
+<Layout title="Blog Técnico | César Adrián Morado" description="Plataforma de aprendizaje y documentación técnica de Frontend. Artículos y tutoriales sobre Angular, React, Vue, Astro, JavaScript y CSS.">
+  <main class="min-h-screen pt-32 pb-16 px-4 max-w-7xl mx-auto space-y-16 relative overflow-hidden" id="blog-root">
+    
+    <!-- Glow Background Lights -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute top-1/2 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+    <!-- Hero Section -->
+    <div class="text-center max-w-3xl mx-auto space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-xs font-semibold uppercase tracking-wider text-accent select-none">
+        <span>📖</span> HUB DE APRENDIZAJE FRONTEND
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-display font-bold text-white tracking-tight leading-none">
+        Frontend <span class="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Insights</span>
+      </h1>
+      <p class="text-text-muted text-base sm:text-lg max-w-2xl mx-auto">
+        Plataforma técnica de artículos, guías detalladas y rutas de aprendizaje diseñadas para el desarrollador Frontend moderno.
+      </p>
+    </div>
+
+    <!-- Primeros pasos quick nav -->
+    <div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4" id="primeros-pasos-nav">
+      <a href="/blog/primeros-pasos/angular" class="glass-card p-4 rounded-xl border border-white/5 hover:border-[#dd0031]/50 flex items-center justify-between group shadow-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+          <span class="text-xl select-none">🅰️</span>
+          <div>
+            <div class="text-xs font-bold text-white uppercase tracking-wider font-display">Aprender Angular</div>
+            <div class="text-[10px] text-text-muted font-sans">Guía de inicio rápido</div>
+          </div>
+        </div>
+        <span class="text-accent group-hover:translate-x-1 transition-transform duration-300 select-none">&rarr;</span>
+      </a>
+      <a href="/blog/primeros-pasos/react" class="glass-card p-4 rounded-xl border border-white/5 hover:border-[#61dafb]/50 flex items-center justify-between group shadow-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+          <span class="text-xl select-none">⚛️</span>
+          <div>
+            <div class="text-xs font-bold text-white uppercase tracking-wider font-display">Aprender React</div>
+            <div class="text-[10px] text-text-muted font-sans">Guía de inicio rápido</div>
+          </div>
+        </div>
+        <span class="text-accent group-hover:translate-x-1 transition-transform duration-300 select-none">&rarr;</span>
+      </a>
+      <a href="/blog/primeros-pasos/vue" class="glass-card p-4 rounded-xl border border-white/5 hover:border-[#42b983]/50 flex items-center justify-between group shadow-md transition-all duration-300">
+        <div class="flex items-center gap-3">
+          <span class="text-xl select-none">🟢</span>
+          <div>
+            <div class="text-xs font-bold text-white uppercase tracking-wider font-display">Aprender Vue</div>
+            <div class="text-[10px] text-text-muted font-sans">Guía de inicio rápido</div>
+          </div>
+        </div>
+        <span class="text-accent group-hover:translate-x-1 transition-transform duration-300 select-none">&rarr;</span>
+      </a>
+    </div>
+
+    <!-- Instant Search & Category Toolbar -->
+    <div class="max-w-4xl mx-auto space-y-6">
+      <!-- Search Input -->
+      <div class="relative">
+        <input 
+          type="text" 
+          id="blog-search" 
+          placeholder="Buscar por título, etiquetas, tecnología o contenido..." 
+          class="w-full px-6 py-4 pl-12 bg-card-dark/50 border border-white/10 rounded-full text-white placeholder-white/30 focus:outline-none focus:border-accent transition-all duration-300 backdrop-blur-md shadow-lg shadow-black/20 text-sm sm:text-base font-sans"
+        />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-5 h-5 text-white/30 absolute left-5 top-1/2 -translate-y-1/2 select-none">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+
+      <!-- Categories Pills -->
+      <div class="flex flex-wrap justify-center gap-2" id="blog-categories">
+        {categoriesList.map((cat, idx) => (
+          <button 
+            class={`px-4 py-2 rounded-full border border-white/10 bg-bg-dark text-xs font-semibold text-text-muted hover:text-white hover:border-accent transition-all duration-300 cursor-pointer ${idx === 0 ? 'active-filter border-accent text-white' : ''}`}
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- FEATURED ARTICLE (Show only if search is empty) -->
+    {featuredPost && (
+      <section id="featured-section" class="max-w-5xl mx-auto space-y-6">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted select-none border-b border-white/5 pb-2">Artículo Destacado</h2>
+        <div class="glass-card rounded-3xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-8 hover:shadow-[0_0_30px_rgba(109,94,249,0.2)] border border-primary/20 transition-all duration-300 group">
+          <!-- Image -->
+          <div class="lg:col-span-6 relative aspect-video lg:aspect-auto lg:h-[320px] rounded-2xl overflow-hidden border border-white/5">
+            {featuredPost.data.heroImage && (
+              <Image 
+                width={720} 
+                height={360} 
+                src={featuredPost.data.heroImage} 
+                alt={featuredPost.data.title}
+                class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" 
+              />
+            )}
+            <div class="absolute top-4 right-4 px-2.5 py-1 rounded bg-bg-dark/80 backdrop-blur-sm border border-white/10 text-[10px] font-bold text-text-muted">
+              {getReadingTime(featuredPost.body)} min lectura
+            </div>
+          </div>
+          <!-- Info -->
+          <div class="lg:col-span-6 flex flex-col justify-between py-2">
+            <div class="space-y-4">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="px-2.5 py-0.5 rounded bg-primary/20 border border-primary/30 text-accent font-semibold uppercase">{featuredPost.data.category}</span>
+                <span class="text-text-muted flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{featuredPost.data.difficulty}
+                </span>
+                <span class="text-text-muted">&bull;</span>
+                <span class="text-text-muted">👁️ {featuredPost.data.views} vistas</span>
+              </div>
+              <a href={`/blog/${featuredPost.id}/`} class="block">
+                <h3 class="text-2xl sm:text-3xl font-display font-bold text-white group-hover:text-accent transition-colors duration-300">
+                  {featuredPost.data.title}
+                </h3>
+              </a>
+              <p class="text-text-muted text-sm sm:text-base leading-relaxed">
+                {featuredPost.data.description}
+              </p>
+            </div>
+            
+            <div class="flex items-center justify-between border-t border-white/5 pt-6 mt-6">
+              <div class="flex items-center gap-3">
+                <img src={featuredPost.data.author.avatar} alt={featuredPost.data.author.name} class="w-8 h-8 rounded-full border border-white/10" />
+                <span class="text-xs font-semibold text-white">{featuredPost.data.author.name}</span>
+              </div>
+              <a href={`/blog/${featuredPost.id}/`} class="text-xs font-bold text-primary hover:text-accent flex items-center gap-1">
+                Leer artículo &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- ARTICLE SEARCH INDEX LIST -->
+    <section class="max-w-6xl mx-auto space-y-6">
+      <h2 id="recent-articles-title" class="text-xs font-bold uppercase tracking-wider text-text-muted select-none border-b border-white/5 pb-2">Artículos Recientes</h2>
+      
+      <!-- Article grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
+        {regularPosts.map((post) => {
+          const rTime = getReadingTime(post.body);
+          return (
+            <article 
+              class="glass-card rounded-2xl overflow-hidden group flex flex-col h-full blog-card shadow-lg hover:shadow-[0_0_25px_rgba(0,212,255,0.15)]"
+              data-title={post.data.title.toLowerCase()}
+              data-desc={post.data.description.toLowerCase()}
+              data-category={post.data.category}
+              data-tags={JSON.stringify(post.data.tags || [])}
+              data-body={post.body.toLowerCase()}
+            >
+              <!-- Image -->
+              <a href={`/blog/${post.id}/`} class="relative overflow-hidden aspect-video border-b border-white/5 block">
+                {post.data.heroImage && (
+                  <Image 
+                    width={720} 
+                    height={360} 
+                    src={post.data.heroImage} 
+                    alt={post.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  />
+                )}
+                <div class="absolute top-4 right-4 px-2 py-0.5 rounded bg-bg-dark/80 backdrop-blur-sm border border-white/10 text-[9px] font-bold text-text-muted">
+                  {rTime} min lectura
+                </div>
+              </a>
+
+              <!-- Info -->
+              <div class="p-6 flex flex-col flex-grow space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-text-muted">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-[9px] font-bold text-accent uppercase tracking-wider">{post.data.category}</span>
+                    <span class="text-[10px] flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{post.data.difficulty}
+                    </span>
+                  </div>
+                  <span>👁️ {post.data.views}</span>
+                </div>
+
+                <div class="space-y-2 flex-grow">
+                  <a href={`/blog/${post.id}/`} class="block">
+                    <h3 class="text-lg font-display font-bold text-white group-hover:text-accent transition-colors duration-300 line-clamp-2">
+                      {post.data.title}
+                    </h3>
+                  </a>
+                  <p class="text-text-muted text-xs sm:text-sm line-clamp-3 leading-relaxed">
+                    {post.data.description}
+                  </p>
+                </div>
+
+                <!-- Footer details -->
+                <div class="border-t border-white/5 pt-4 flex items-center justify-between text-xs">
+                  <span class="text-text-muted"><FormattedDate date={post.data.pubDate} /></span>
+                  <a href={`/blog/${post.id}/`} class="text-xs font-bold text-primary hover:text-accent flex items-center gap-1">
+                    Ver más &rarr;
+                  </a>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <!-- Empty Search State -->
+      <div id="empty-state" class="text-center py-12 space-y-4 hidden">
+        <div class="text-4xl select-none">🔍</div>
+        <h3 class="text-lg font-display font-semibold text-white">No se encontraron artículos</h3>
+        <p class="text-text-muted text-sm max-w-sm mx-auto">Prueba buscando con palabras clave diferentes o selecciona otra categoría.</p>
+      </div>
+    </section>
+
+    <!-- LEARNING PATHS / SERIES (Show only if search is empty) -->
+    <section id="series-section" class="max-w-5xl mx-auto space-y-8">
+      <div class="space-y-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted select-none border-b border-white/5 pb-2">Rutas de Aprendizaje (Series)</h2>
+        <p class="text-sm text-text-muted font-sans">Sigue estas guías ordenadas paso a paso para dominar herramientas y tecnologías.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {learningSeries.map((s) => (
+          <div class="glass-card rounded-2xl border border-white/10 p-6 space-y-4 hover:shadow-[0_0_20px_rgba(0,212,255,0.05)] transition-all duration-300">
+            <div>
+              <span class="text-xs font-bold text-accent uppercase tracking-wider">{s.id.toUpperCase()} PATH</span>
+              <h3 class="text-xl font-display font-bold text-white mt-1">{s.name}</h3>
+              <p class="text-text-muted text-xs mt-1 leading-relaxed">{s.desc}</p>
+            </div>
+            
+            <!-- Steps checklist -->
+            <div class="border-t border-white/5 pt-4">
+              <ul class="space-y-2 text-xs">
+                {s.steps.map((st) => {
+                  const linkedPost = findPostForStep(s.id, st.step);
+                  return (
+                    <li class="flex items-center justify-between p-2 rounded-lg bg-bg-dark/40 border border-white/5 group-step">
+                      <div class="flex items-center gap-2">
+                        <span class={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold ${linkedPost ? 'bg-primary/20 border border-primary/40 text-accent' : 'bg-white/5 text-text-muted'}`}>
+                          {st.step}
+                        </span>
+                        <span class={linkedPost ? 'text-white font-medium' : 'text-text-muted'}>{st.name}</span>
+                      </div>
+                      
+                      {linkedPost ? (
+                        <a href={`/blog/${linkedPost.id}/`} class="text-[10px] text-accent hover:text-white font-bold underline transition-colors duration-200">
+                          Leer artículo &rarr;
+                        </a>
+                      ) : (
+                        <span class="text-[9px] px-2 py-0.5 rounded bg-white/5 text-text-muted select-none">Próximamente</span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- TAG CLOUD CLUSTER -->
+    <section id="tags-section" class="max-w-4xl mx-auto space-y-4 text-center">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-text-muted select-none border-b border-white/5 pb-2">Etiquetas de Contenido</h2>
+      <div class="flex flex-wrap justify-center gap-2 pt-2">
+        {uniqueTags.map((tag) => (
+          <button 
+            class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:border-accent text-xs font-medium text-text-muted hover:text-white transition-all duration-200 cursor-pointer tag-pill"
+            data-tag={tag}
+          >
+            #{tag}
+          </button>
+        ))}
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function setupBlogEngine() {
+    const searchIn = document.getElementById('blog-search') as HTMLInputElement | null;
+    const categoryButtons = document.querySelectorAll('#blog-categories button');
+    const tagButtons = document.querySelectorAll('.tag-pill');
+    const blogCards = document.querySelectorAll('.blog-card');
+    
+    const featuredSec = document.getElementById('featured-section');
+    const seriesSec = document.getElementById('series-section');
+    const tagsSec = document.getElementById('tags-section');
+    const primerosPasosSec = document.getElementById('primeros-pasos-nav');
+    const recentArticlesTitle = document.getElementById('recent-articles-title');
+    const emptyState = document.getElementById('empty-state');
+
+    if (!blogCards.length) return;
+
+    let activeCategory = 'Todos';
+    let activeTag = '';
+    let searchQuery = '';
+
+    const filterPosts = () => {
+      let matchesCount = 0;
+
+      // Show/Hide sections depending on search presence
+      const hasFilter = searchQuery !== '' || activeCategory !== 'Todos' || activeTag !== '';
+
+      if (hasFilter) {
+        if (featuredSec) featuredSec.classList.add('hidden');
+        if (seriesSec) seriesSec.classList.add('hidden');
+        if (tagsSec) tagsSec.classList.add('hidden');
+        if (primerosPasosSec) primerosPasosSec.classList.add('hidden');
+        if (recentArticlesTitle) recentArticlesTitle.textContent = 'Resultados de Búsqueda';
+      } else {
+        if (featuredSec) featuredSec.classList.remove('hidden');
+        if (seriesSec) seriesSec.classList.remove('hidden');
+        if (tagsSec) tagsSec.classList.remove('hidden');
+        if (primerosPasosSec) primerosPasosSec.classList.remove('hidden');
+        if (recentArticlesTitle) recentArticlesTitle.textContent = 'Artículos Recientes';
+      }
+
+      blogCards.forEach((card) => {
+        const title = card.getAttribute('data-title') || '';
+        const desc = card.getAttribute('data-desc') || '';
+        const body = card.getAttribute('data-body') || '';
+        const category = card.getAttribute('data-category') || '';
+        const rawTags = card.getAttribute('data-tags') || '[]';
+        const tags: string[] = JSON.parse(rawTags);
+
+        // Search match
+        const matchesSearch = searchQuery === '' || 
+                              title.includes(searchQuery) || 
+                              desc.includes(searchQuery) ||
+                              body.includes(searchQuery) ||
+                              category.toLowerCase().includes(searchQuery) ||
+                              tags.some(t => t.toLowerCase().includes(searchQuery));
+        
+        // Category match
+        const matchesCategory = activeCategory === 'Todos' || category === activeCategory;
+
+        // Tag match
+        const matchesTag = activeTag === '' || tags.includes(activeTag);
+
+        if (matchesSearch && matchesCategory && matchesTag) {
+          matchesCount++;
+          gsap.to(card, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.3,
+            display: 'flex',
+            overwrite: 'auto'
+          });
+        } else {
+          gsap.to(card, {
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.3,
+            display: 'none',
+            overwrite: 'auto'
+          });
+        }
+      });
+
+      if (matchesCount === 0) {
+        emptyState?.classList.remove('hidden');
+      } else {
+        emptyState?.classList.add('hidden');
+      }
+    };
+
+    // Category button listener
+    categoryButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        categoryButtons.forEach(b => b.classList.remove('active-filter', 'border-accent', 'text-white'));
+        btn.classList.add('active-filter', 'border-accent', 'text-white');
+
+        // Clear tag filter on category click
+        activeTag = '';
+        tagButtons.forEach(b => b.classList.remove('border-accent', 'text-white'));
+
+        activeCategory = btn.getAttribute('data-category') || 'Todos';
+        filterPosts();
+      });
+    });
+
+    // Tag button listener
+    tagButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const clickedTag = btn.getAttribute('data-tag') || '';
+        
+        if (activeTag === clickedTag) {
+          // Toggle off
+          activeTag = '';
+          btn.classList.remove('border-accent', 'text-white');
+        } else {
+          // Toggle on
+          tagButtons.forEach(b => b.classList.remove('border-accent', 'text-white'));
+          btn.classList.add('border-accent', 'text-white');
+          activeTag = clickedTag;
+
+          // Clear category selection back to 'Todos'
+          categoryButtons.forEach(b => b.classList.remove('active-filter', 'border-accent', 'text-white'));
+          categoryButtons[0].classList.add('active-filter', 'border-accent', 'text-white');
+          activeCategory = 'Todos';
+        }
+        
+        filterPosts();
+      });
+    });
+
+    // Search bar listener
+    searchIn?.addEventListener('input', (e) => {
+      searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+      filterPosts();
+    });
+  }
+
+  setupBlogEngine();
+  document.addEventListener('astro:page-load', setupBlogEngine);
+</script>
+
+<style>
+  /* Custom filter highlight classes */
+  .active-filter {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white !important;
+  }
+</style>

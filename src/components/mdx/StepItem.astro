@@ -1,0 +1,23 @@
+---
+interface Props {
+  step: number;
+  title: string;
+}
+const { step, title } = Astro.props;
+---
+<div class="relative step-item space-y-2">
+  <!-- Circular number indicator on the connecting line -->
+  <span class="absolute -left-[38px] top-0.5 flex h-7 w-7 items-center justify-center rounded-full border border-primary bg-bg-dark text-xs font-bold text-primary font-display select-none">
+    {step}
+  </span>
+  <h4 class="text-base sm:text-lg font-display font-bold text-white leading-none pt-1">{title}</h4>
+  <div class="text-text-muted text-sm sm:text-base leading-relaxed prose-step pl-1">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .prose-step :global(p) {
+    margin-bottom: 0 !important;
+  }
+</style>

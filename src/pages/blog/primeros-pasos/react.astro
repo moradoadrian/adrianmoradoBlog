@@ -1,0 +1,147 @@
+---
+import PrimerosPasosLayout from '../../../layouts/PrimerosPasosLayout.astro';
+import YouTubeVideo from '../../../components/YouTubeVideo.astro';
+
+const title = 'Primeros pasos con React';
+const description = 'Guía de inicio rápido para aprender React desde cero. Scaffolding con Vite, concepto de JSX, componentes, props y servidor de desarrollo.';
+
+const headings = [
+  { slug: 'que-es-react', text: '¿Qué es React?' },
+  { slug: 'para-que-sirve', text: '¿Para qué sirve?' },
+  { slug: 'ventajas-y-desventajas', text: 'Ventajas y Desventajas' },
+  { slug: 'requisitos', text: 'Requisitos previos' },
+  { slug: 'instalacion-nodejs', text: '1. Instalación de Node.js' },
+  { slug: 'crear-vite', text: '2. Crear un proyecto con Vite' },
+  { slug: 'jsx', text: '3. ¿Qué es JSX?' },
+  { slug: 'componentes', text: '4. Componentes y Props' },
+  { slug: 'ejecutar', text: '5. Ejecutar la aplicación' },
+  { slug: 'que-aprender-despues', text: '¿Qué aprender después?' },
+  { slug: 'curso-recomendado', text: 'Curso recomendado' }
+];
+---
+
+<PrimerosPasosLayout title={title} description={description} framework="react" headings={headings}>
+  
+  <h2 id="que-es-react">¿Qué es React?</h2>
+  <p>
+    React es una **biblioteca de JavaScript** de código abierto para construir interfaces de usuario. Desarrollada por Meta (Facebook) y una gran comunidad, destaca por su enfoque declarativo basado en componentes y su capacidad para renderizar actualizaciones de manera eficiente gracias al concepto de Virtual DOM.
+  </p>
+
+  <h2 id="para-que-sirve">¿Para qué sirve?</h2>
+  <p>
+    React sirve para construir la vista de aplicaciones web de una sola página (SPAs), aplicaciones móviles (a través de React Native) y aplicaciones integradas en el servidor. Al enfocarse exclusivamente en la interfaz gráfica, se puede combinar libremente con routers, gestores de estado u otras librerías para formar una arquitectura completa y a medida.
+  </p>
+
+  <h2 id="ventajas-y-desventajas">Ventajas y Desventajas</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+    <div class="p-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
+      <h3 class="text-emerald-400 font-bold text-sm uppercase tracking-wider mb-2">Ventajas</h3>
+      <ul class="list-disc pl-5 text-xs sm:text-sm space-y-1 text-text-muted">
+        <li><strong>Enfoque basado en componentes:</strong> Código modular y altamente reutilizable.</li>
+        <li><strong>Gran ecosistema:</strong> Miles de librerías listas para formularios, estado y routing.</li>
+        <li><strong>Fácil de integrar:</strong> Puede inyectarse en partes pequeñas de una aplicación existente.</li>
+        <li><strong>Curva inicial amigable:</strong> Si sabes JavaScript moderno, aprenderás React rápidamente.</li>
+      </ul>
+    </div>
+    
+    <div class="p-5 rounded-xl border border-red-500/20 bg-red-500/5">
+      <h3 class="text-red-400 font-bold text-sm uppercase tracking-wider mb-2">Desventajas</h3>
+      <ul class="list-disc pl-5 text-xs sm:text-sm space-y-1 text-text-muted">
+        <li><strong>Es una biblioteca, no un framework:</strong> Debes tomar decisiones de arquitectura e instalar paquetes de terceros para routing o fetching.</li>
+        <li><strong>Ritmo de cambio acelerado:</strong> Los Hooks cambiaron por completo las prácticas recomendadas anteriores.</li>
+        <li><strong>JSX inicial:</strong> Mezclar HTML y JS en el mismo archivo asusta a algunos principiantes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 id="requisitos">Requisitos previos</h2>
+  <p>
+    Para aprender React con éxito necesitas dominar JavaScript moderno (ES6+):
+  </p>
+  <ul class="list-disc pl-6 space-y-1">
+    <li>Funciones flecha (Arrow functions).</li>
+    <li>Desestructuración de objetos y arrays (Destructuring).</li>
+    <li>Métodos funcionales de arrays (<code>map</code>, <code>filter</code>, <code>reduce</code>).</li>
+    <li>Operador de propagación (Spread operator).</li>
+  </ul>
+
+  <!-- TIP Banner -->
+  <div class="my-6 p-5 rounded-2xl border border-accent/30 bg-accent/5 space-y-2">
+    <div class="flex items-center gap-2 font-display font-bold text-sm text-white select-none">
+      <span class="text-lg">🚀</span>
+      <span class="text-accent">Consejo Útil</span>
+    </div>
+    <p class="text-text-muted text-sm leading-relaxed m-0">
+      React funciona enteramente con flujos de datos unidireccionales (de padres a hijos). No intentes mutar las variables directamente; usa siempre el estado nativo (`useState`) para reflejar cambios en la pantalla.
+    </p>
+  </div>
+
+  <h2 id="instalacion-nodejs">1. Instalación de Node.js</h2>
+  <p>
+    Al igual que la mayoría de librerías modernas, necesitarás Node.js instalado en tu computadora para gestionar dependencias. Descárgalo de <a href="https://nodejs.org/" target="_blank">nodejs.org</a> en su versión LTS.
+  </p>
+
+  <h2 id="crear-vite">2. Crear un proyecto con Vite</h2>
+  <p>
+    En lugar de la antigua herramienta lenta <code>create-react-app</code>, hoy en día se recomienda **Vite** para inicializar proyectos React ultra rápidos. Abre tu consola y corre:
+  </p>
+  <pre><code>npm create vite@latest mi-proyecto-react -- --template react-ts</code></pre>
+  <p>
+    El flag <code>react-ts</code> configurará automáticamente React utilizando soporte nativo para TypeScript.
+  </p>
+
+  <h2 id="jsx">3. ¿Qué es JSX?</h2>
+  <p>
+    **JSX (JavaScript XML)** es una extensión sintáctica de JavaScript que te permite estructurar tus plantillas visuales con una sintaxis similar a HTML dentro de tus archivos JS/TS.
+  </p>
+  <pre><code>const elemento = &lt;h1&gt;Hola, &#123;nombre&#125;!&lt;/h1&gt;;</code></pre>
+  <p>
+    Las llaves &#123;&#125; te permiten evaluar cualquier expresión JavaScript válida de forma directa y renderizar su resultado.
+  </p>
+
+  <h2 id="componentes">4. Componentes y Props</h2>
+  <p>
+    En React, un componente es simplemente una función JavaScript que devuelve código JSX. Las **props** son los argumentos que pasamos a estas funciones para customizar su contenido:
+  </p>
+  <pre><code>// Definición del componente
+function Saludo(&#123; nombre &#125;) &#123;
+  return &lt;p&gt;Hola, &#123;nombre&#125;!&lt;/p&gt;;
+&#125;
+
+// Consumo del componente
+function App() &#123;
+  return &lt;Saludo nombre="César" /&gt;;
+&#125;</code></pre>
+
+  <h2 id="ejecutar">5. Ejecutar la aplicación</h2>
+  <p>
+    Entra en el directorio de tu proyecto, instala los paquetes iniciales y levanta el servidor local:
+  </p>
+  <pre><code>cd mi-proyecto-react
+npm install
+npm run dev</code></pre>
+  <p>
+    Abre <a href="http://localhost:5173/" target="_blank">http://localhost:5173/</a> en tu navegador para ver tu nueva aplicación en vivo.
+  </p>
+
+  <h2 id="que-aprender-despues">¿Qué aprender después?</h2>
+  <p>
+    Una vez dominados los componentes básicos, la ruta de aprendizaje recomendada continúa con:
+  </p>
+  <ol class="list-decimal pl-6 space-y-1">
+    <li>Gestión de estado básico con el Hook <code>useState</code>.</li>
+    <li>Efectos secundarios y consultas HTTP con <code>useEffect</code>.</li>
+    <li>Gestión de estado global y almacenes ligeros con <strong>Zustand</strong>.</li>
+  </ol>
+
+  <hr class="border-white/10 my-8" />
+
+  <h2 id="curso-recomendado">Curso recomendado</h2>
+  <p>
+    Aprende de manera interactiva visualizando el siguiente curso guiado paso a paso:
+  </p>
+
+  <YouTubeVideo videoId="7iobxzd_2wY" title="Curso de React para Principiantes desde Cero" />
+
+</PrimerosPasosLayout>

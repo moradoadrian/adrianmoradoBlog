@@ -1,0 +1,150 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <BaseHead title={title} description={description} />
+    <ClientRouter />
+  </head>
+  <body class="bg-bg-dark text-text-main font-sans selection:bg-primary/30 selection:text-accent overflow-x-hidden antialiased">
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-secondary to-accent z-50 origin-left scale-x-0"></div>
+
+    <!-- Custom Cursor elements -->
+    <div class="custom-cursor pointer-events-none fixed top-0 left-0 z-50 rounded-full border border-accent mix-blend-difference hidden md:block" id="cursor-ring"></div>
+    <div class="custom-cursor-dot pointer-events-none fixed top-0 left-0 z-50 w-2 h-2 bg-accent rounded-full mix-blend-difference hidden md:block" id="cursor-dot"></div>
+
+    <Header />
+    <slot />
+    <Footer />
+
+    <script>
+      import Lenis from 'lenis';
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      let lenis: Lenis | null = null;
+      let scrollTriggerInstance: ScrollTrigger | null = null;
+
+      function initLenis() {
+        if (lenis) {
+          lenis.destroy();
+        }
+        
+        lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+        });
+
+        // Sync ScrollTrigger with Lenis
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add((time) => {
+          lenis?.raf(time * 1000);
+        });
+
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      function initCursor() {
+        const ring = document.getElementById('cursor-ring');
+        const dot = document.getElementById('cursor-dot');
+        
+        if (!ring || !dot) return;
+
+        // Set initial positions
+        gsap.set(ring, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
+        gsap.set(dot, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
+
+        const onMouseMove = (e: MouseEvent) => {
+          gsap.to(ring, { x: e.clientX, y: e.clientY, duration: 0.4, ease: 'power3.out' });
+          gsap.to(dot, { x: e.clientX, y: e.clientY, duration: 0.1 });
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+
+        // Hover animations
+        const handleMouseEnter = () => {
+          gsap.to(ring, { scale: 2, borderColor: '#6D5EF9', backgroundColor: 'rgba(109, 94, 249, 0.1)', duration: 0.3 });
+          gsap.to(dot, { scale: 0.5, backgroundColor: '#6D5EF9', duration: 0.3 });
+        };
+
+        const handleMouseLeave = () => {
+          gsap.to(ring, { scale: 1, borderColor: '#00D4FF', backgroundColor: 'transparent', duration: 0.3 });
+          gsap.to(dot, { scale: 1, backgroundColor: '#00D4FF', duration: 0.3 });
+        };
+
+        const addHoverListeners = () => {
+          const links = document.querySelectorAll('a, button, [role="button"], input, textarea, select');
+          links.forEach(link => {
+            link.addEventListener('mouseenter', handleMouseEnter);
+            link.addEventListener('mouseleave', handleMouseLeave);
+          });
+        };
+
+        addHoverListeners();
+
+        // Re-run hover listeners if DOM updates
+        const observer = new MutationObserver(() => {
+          addHoverListeners();
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        // Clean up event listener when changing pages
+        document.addEventListener('astro:before-preparation', () => {
+          window.removeEventListener('mousemove', onMouseMove);
+          observer.disconnect();
+        }, { once: true });
+      }
+
+      function initScrollProgress() {
+        const progressBar = document.getElementById('scroll-progress');
+        if (!progressBar) return;
+        
+        // Clean old ScrollTrigger instances for the body progress
+        if (scrollTriggerInstance) {
+          scrollTriggerInstance.kill();
+        }
+
+        scrollTriggerInstance = ScrollTrigger.create({
+          trigger: 'body',
+          start: 'top top',
+          end: 'bottom bottom',
+          onUpdate: (self) => {
+            gsap.set(progressBar, { scaleX: self.progress });
+          }
+        });
+      }
+
+      // Initialize on load and page transition
+      const setup = () => {
+        initLenis();
+        initCursor();
+        initScrollProgress();
+        
+        // Refresh GSAP ScrollTrigger to register new elements on page load
+        ScrollTrigger.refresh();
+      };
+
+      setup();
+      document.addEventListener('astro:page-load', setup);
+    </script>
+  </body>
+</html>

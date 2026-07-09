@@ -1,0 +1,46 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+// Import custom MDX components to make them globally available in all articles
+import ArticleYoutube from '../../components/mdx/ArticleYoutube.astro';
+import InfoBlock from '../../components/mdx/InfoBlock.astro';
+import Tabs from '../../components/mdx/Tabs.astro';
+import TabItem from '../../components/mdx/TabItem.astro';
+import Accordion from '../../components/mdx/Accordion.astro';
+import TerminalBlock from '../../components/mdx/TerminalBlock.astro';
+import CodeComparison from '../../components/mdx/CodeComparison.astro';
+import Checklist from '../../components/mdx/Checklist.astro';
+import Steps from '../../components/mdx/Steps.astro';
+import StepItem from '../../components/mdx/StepItem.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content, headings } = await render(post);
+
+// Component mapping for MDX
+const components = {
+  ArticleYoutube,
+  InfoBlock,
+  Tabs,
+  TabItem,
+  Accordion,
+  TerminalBlock,
+  CodeComparison,
+  Checklist,
+  Steps,
+  StepItem
+};
+---
+
+<BlogPost {...post.data} headings={headings} id={post.id} body={post.body}>
+  <Content components={components} />
+</BlogPost>

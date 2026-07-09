@@ -1,0 +1,9 @@
+---
+interface Props {
+  index: number;
+}
+const { index } = Astro.props;
+---
+<div class={`tab-panel ${index !== 0 ? 'hidden' : ''}`} data-index={index}>
+  <slot />
+</div>

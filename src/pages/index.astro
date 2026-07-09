@@ -1,0 +1,1296 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+// Define the skills database
+const skills = [
+  { name: 'Angular', logo: 'Ng', level: 'Experto', percentage: 95, years: 4, lastUsed: 'Sistema de Auditoría', glow: 'hover:border-[#dd0031] hover:shadow-[0_0_20px_rgba(221,0,49,0.3)]', barColor: 'bg-[#dd0031]', txtColor: 'text-[#dd0031]' },
+  { name: 'TypeScript', logo: 'Ts', level: 'Experto', percentage: 90, years: 4, lastUsed: 'Sistema de Auditoría', glow: 'hover:border-[#3178c6] hover:shadow-[0_0_20px_rgba(49,120,198,0.3)]', barColor: 'bg-[#3178c6]', txtColor: 'text-[#3178c6]' },
+  { name: 'JavaScript', logo: 'Js', level: 'Experto', percentage: 95, years: 5, lastUsed: 'Constancias de Inexistencia', glow: 'hover:border-[#f7df1e] hover:shadow-[0_0_20px_rgba(247,223,30,0.2)]', barColor: 'bg-[#f7df1e]', txtColor: 'text-[#f7df1e]' },
+  { name: 'Astro', logo: 'As', level: 'Avanzado', percentage: 85, years: 1, lastUsed: 'Este Portafolio', glow: 'hover:border-[#ff5d00] hover:shadow-[0_0_20px_rgba(255,93,0,0.3)]', barColor: 'bg-[#ff5d00]', txtColor: 'text-[#ff5d00]' },
+  { name: 'React', logo: 'Re', level: 'Avanzado', percentage: 80, years: 1, lastUsed: 'Proyectos Personales', glow: 'hover:border-[#61dafb] hover:shadow-[0_0_20px_rgba(97,218,251,0.3)]', barColor: 'bg-[#61dafb]', txtColor: 'text-[#61dafb]' },
+  { name: 'Vue', logo: 'Vu', level: 'Intermedio', percentage: 75, years: 1, lastUsed: 'Portal de Aprendizaje', glow: 'hover:border-[#42b983] hover:shadow-[0_0_20px_rgba(66,185,131,0.3)]', barColor: 'bg-[#42b983]', txtColor: 'text-[#42b983]' },
+  { name: 'Tailwind CSS', logo: 'Tw', level: 'Experto', percentage: 95, years: 4, lastUsed: 'Sistema de Auditoría', glow: 'hover:border-[#38bdf8] hover:shadow-[0_0_20px_rgba(56,189,248,0.3)]', barColor: 'bg-[#38bdf8]', txtColor: 'text-[#38bdf8]' },
+  { name: 'PrimeNG', logo: 'Pn', level: 'Avanzado', percentage: 85, years: 2, lastUsed: 'Dashboard de Ventas', glow: 'hover:border-[#0ea5e9] hover:shadow-[0_0_20px_rgba(14,165,233,0.3)]', barColor: 'bg-[#0ea5e9]', txtColor: 'text-[#0ea5e9]' },
+  { name: 'Angular Material', logo: 'Ma', level: 'Experto', percentage: 90, years: 4, lastUsed: 'Constancias de Inexistencia', glow: 'hover:border-[#3f51b5] hover:shadow-[0_0_20px_rgba(63,81,181,0.3)]', barColor: 'bg-[#3f51b5]', txtColor: 'text-[#3f51b5]' },
+  { name: 'RxJS', logo: 'Rx', level: 'Experto', percentage: 90, years: 4, lastUsed: 'Sistema de Auditoría', glow: 'hover:border-[#e10098] hover:shadow-[0_0_20px_rgba(225,0,152,0.3)]', barColor: 'bg-[#e10098]', txtColor: 'text-[#e10098]' },
+  { name: 'Node.js', logo: 'Nd', level: 'Avanzado', percentage: 80, years: 4, lastUsed: 'APIs Internas', glow: 'hover:border-[#339933] hover:shadow-[0_0_20px_rgba(51,153,51,0.3)]', barColor: 'bg-[#339933]', txtColor: 'text-[#339933]' },
+  { name: 'C#', logo: 'C#', level: 'Avanzado', percentage: 80, years: 1, lastUsed: 'Sistema de Auditoría', glow: 'hover:border-[#178600] hover:shadow-[0_0_20px_rgba(23,134,0,0.3)]', barColor: 'bg-[#178600]', txtColor: 'text-[#178600]' },
+  { name: '.NET', logo: 'Net', level: 'Avanzado', percentage: 80, years: 1, lastUsed: 'Sistema de Auditoría', glow: 'hover:border-[#512bd4] hover:shadow-[0_0_20px_rgba(81,43,212,0.3)]', barColor: 'bg-[#512bd4]', txtColor: 'text-[#512bd4]' },
+  { name: 'Python', logo: 'Py', level: 'Intermedio', percentage: 75, years: 1, lastUsed: 'APIs Registro Civil', glow: 'hover:border-[#3776ab] hover:shadow-[0_0_20px_rgba(55,118,171,0.3)]', barColor: 'bg-[#3776ab]', txtColor: 'text-[#3776ab]' },
+  { name: 'FastAPI', logo: 'Fa', level: 'Avanzado', percentage: 80, years: 1, lastUsed: 'Constancias de Inexistencia', glow: 'hover:border-[#009688] hover:shadow-[0_0_20px_rgba(0,150,136,0.3)]', barColor: 'bg-[#009688]', txtColor: 'text-[#009688]' },
+  { name: 'Firebase', logo: 'Fb', level: 'Experto', percentage: 90, years: 2, lastUsed: 'Anotaciones Judiciales', glow: 'hover:border-[#ffca28] hover:shadow-[0_0_20px_rgba(255,202,40,0.3)]', barColor: 'bg-[#ffca28]', txtColor: 'text-[#ffca28]' },
+  { name: 'Supabase', logo: 'Sb', level: 'Avanzado', percentage: 80, years: 1, lastUsed: 'Proyectos Personales', glow: 'hover:border-[#3fcf8e] hover:shadow-[0_0_20px_rgba(63,207,142,0.3)]', barColor: 'bg-[#3fcf8e]', txtColor: 'text-[#3fcf8e]' },
+  { name: 'SQL Server', logo: 'Sql', level: 'Avanzado', percentage: 85, years: 4, lastUsed: 'Sistema de Auditoría', glow: 'hover:border-[#e38c00] hover:shadow-[0_0_20px_rgba(227,140,0,0.3)]', barColor: 'bg-[#e38c00]', txtColor: 'text-[#e38c00]' },
+  { name: 'Oracle', logo: 'Or', level: 'Avanzado', percentage: 80, years: 3, lastUsed: 'Sistemas Hospitalarios MAC', glow: 'hover:border-[#f80000] hover:shadow-[0_0_20px_rgba(248,0,0,0.3)]', barColor: 'bg-[#f80000]', txtColor: 'text-[#f80000]' },
+  { name: 'PostgreSQL', logo: 'Pg', level: 'Avanzado', percentage: 85, years: 4, lastUsed: 'Aplicaciones Web Infoexpo', glow: 'hover:border-[#4169e1] hover:shadow-[0_0_20px_rgba(65,105,225,0.3)]', barColor: 'bg-[#4169e1]', txtColor: 'text-[#4169e1]' },
+  { name: 'Git', logo: 'Gt', level: 'Experto', percentage: 90, years: 5, lastUsed: 'Todos los proyectos', glow: 'hover:border-[#f05032] hover:shadow-[0_0_20px_rgba(240,80,50,0.3)]', barColor: 'bg-[#f05032]', txtColor: 'text-[#f05032]' },
+  { name: 'GitHub', logo: 'Gh', level: 'Experto', percentage: 90, years: 5, lastUsed: 'Código en Vivo', glow: 'hover:border-white hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]', barColor: 'bg-white', txtColor: 'text-white' },
+  { name: 'Docker', logo: 'Dk', level: 'Intermedio', percentage: 70, years: 1, lastUsed: 'Despliegues Locales', glow: 'hover:border-[#2496ed] hover:shadow-[0_0_20px_rgba(36,150,237,0.3)]', barColor: 'bg-[#2496ed]', txtColor: 'text-[#2496ed]' },
+  { name: 'VS Code', logo: 'Vs', level: 'Experto', percentage: 95, years: 6, lastUsed: 'Todos los proyectos', glow: 'hover:border-[#007acc] hover:shadow-[0_0_20px_rgba(0,122,204,0.3)]', barColor: 'bg-[#007acc]', txtColor: 'text-[#007acc]' },
+  { name: 'Figma', logo: 'Fg', level: 'Avanzado', percentage: 80, years: 1, lastUsed: 'Diseño UX/UI Portafolio', glow: 'hover:border-[#f24e1d] hover:shadow-[0_0_20px_rgba(242,78,29,0.3)]', barColor: 'bg-[#f24e1d]', txtColor: 'text-[#f24e1d]' }
+];
+
+// Define projects database
+const projects = [
+  {
+    id: 'constancias-inexistencia',
+    title: 'Constancias de Inexistencia',
+    shortDesc: 'Digitalización del trámite para el Registro Civil.',
+    desc: 'Sistema desarrollado para la Dirección General del Registro Civil para la digitalización del trámite de constancias de inexistencia. Permite agilizar los tiempos de respuesta al ciudadano y automatizar la búsqueda en bases de datos.',
+    image: '/constanciasI.png',
+    techs: ['Angular', 'Python FastAPI', 'Material Design', 'Firebase', 'SHA-256'],
+    participation: [
+      'Diseño de arquitectura Frontend.',
+      'Desarrollo completo de interfaces.',
+      'Integración con APIs.',
+      'Implementación de carga de archivos.',
+      'Optimización de experiencia de usuario.'
+    ],
+    glow: 'hover:shadow-[0_0_25px_rgba(109,94,249,0.25)] hover:border-[#6d5ef9]'
+  },
+  {
+    id: 'anotaciones-judiciales',
+    title: 'Anotaciones Judiciales',
+    shortDesc: 'Captura y administración de anotaciones judiciales ACTAS.',
+    desc: 'Sistema especializado para la captura y administración de anotaciones judiciales en actas del estado civil. Cuenta con un riguroso control de permisos y generación dinámica de documentos para su posterior impresión.',
+    image: '/anotacionesJ.png',
+    techs: ['Angular', 'Tailwind CSS', 'MySQL', 'Firebase'],
+    participation: [
+      'Frontend completo.',
+      'Control de permisos.',
+      'Impresión de documentos.',
+      'Diseño responsive.'
+    ],
+    glow: 'hover:shadow-[0_0_25px_rgba(0,212,255,0.25)] hover:border-[#00d4ff]'
+  },
+  {
+    id: 'purple-wings',
+    title: 'Purple Wings',
+    shortDesc: 'Sistema administrativo y de inventario híbrido.',
+    desc: 'Sistema administrativo completo desarrollado para gestionar inventarios y control documental interno. Diseñado con una interfaz híbrida para optimizar flujos operativos en dispositivos móviles y de escritorio.',
+    image: '/purpleW.png',
+    techs: ['Angular', 'Firebase', 'Capacitor', 'Tailwind CSS'],
+    participation: [
+      'Desarrollo Full Stack.',
+      'Panel administrativo.',
+      'Inventario.',
+      'Control documental.'
+    ],
+    glow: 'hover:shadow-[0_0_25px_rgba(139,92,246,0.25)] hover:border-[#8b5cf6]'
+  },
+  {
+    id: 'pos-miche',
+    title: 'POS Miche',
+    shortDesc: 'Aplicación punto de venta híbrida.',
+    desc: 'Sistema de punto de venta interactivo y de ágil respuesta para el control de inventarios y registro de ventas. Desarrollado como aplicación móvil híbrida conectada a un panel de control en la nube.',
+    image: '/posMiche.png',
+    techs: ['Angular', 'Firebase', 'Capacitor', 'Tailwind CSS'],
+    participation: [
+      'Frontend.',
+      'Aplicación híbrida.',
+      'Control de inventario.',
+      'Dashboard.'
+    ],
+    glow: 'hover:shadow-[0_0_25px_rgba(240,80,50,0.25)] hover:border-[#f05032]'
+  },
+  {
+    id: 'logpath',
+    title: 'LogPath',
+    shortDesc: 'Dashboard para monitoreo de terminales.',
+    desc: 'Dashboard desarrollado para el monitoreo continuo de terminales conectadas. Permite visualizar en tiempo real el consumo de APIs y el estado lógico de los andamiajes del sistema.',
+    image: '/logpath.png',
+    techs: ['Angular', '.NET', 'MySQL', 'Tailwind CSS'],
+    participation: [
+      'Frontend Angular.',
+      'Dashboard.',
+      'Visualización en tiempo real.',
+      'Consumo de APIs.'
+    ],
+    glow: 'hover:shadow-[0_0_25px_rgba(255,93,0,0.25)] hover:border-[#ff5d00]'
+  }
+];
+
+// Define certificates
+const certificates = [
+  { title: 'Frontend Developer Senior', issuer: 'Platzi', date: '2025', id: 'platzi-senior' },
+  { title: 'Architecting Angular Apps', issuer: 'Angular Nation', date: '2025', id: 'angular-nation' },
+  { title: 'React Advanced Patterns', issuer: 'Frontend Masters', date: '2024', id: 'frontend-masters' },
+  { title: 'Astro Framework Specialist', issuer: 'Astro Build', date: '2024', id: 'astro-build' }
+];
+
+// Experience timeline
+const experiences = [
+  {
+    role: 'Ingeniero de Software',
+    company: 'Instituto Electoral del Estado de Guanajuato',
+    period: '2026 - Actualidad',
+    bullets: [
+      'Desarrollo Frontend con Angular.',
+      'Desarrollo Backend con C#/.NET.',
+      'Sistema de Auditoría.',
+      'Microservicios.',
+      'Bitácora de eventos.'
+    ]
+  },
+  {
+    role: 'Desarrollador de Software',
+    company: 'Registro Civil del Estado de Guanajuato',
+    period: '2024 - 2025',
+    bullets: [
+      'Desarrollo de plataformas web.',
+      'Angular.',
+      'Python FastAPI.',
+      'Digitalización de trámites gubernamentales.'
+    ]
+  },
+  {
+    role: 'Soporte y Desarrollo',
+    company: 'Hospitales MAC',
+    period: '2020 - 2024',
+    bullets: [
+      'Soporte a sistemas hospitalarios.',
+      'Oracle.',
+      'Automatización de reportes.',
+      'Atención a usuarios.'
+    ]
+  },
+  {
+    role: 'Frontend Developer',
+    company: 'Infoexpo',
+    period: '2018 - 2020',
+    bullets: [
+      'Desarrollo de aplicaciones web con PHP Symfony.',
+      'Interfaces con HTML, CSS y JavaScript.',
+      'PostgreSQL.'
+    ]
+  }
+];
+
+---
+
+<Layout title="César Adrián Morado | Portfolio Premium" description="Frontend Developer Senior | Construyo experiencias digitales modernas, rápidas y escalables con Astro, Angular y React.">
+  <main class="w-full relative">
+    
+    <!-- HERO SECTION -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden px-4">
+      <!-- 3D Particle Canvas Background -->
+      <canvas id="hero-particles" class="absolute inset-0 w-full h-full pointer-events-auto z-0"></canvas>
+      
+      <!-- Gradient Mesh Overlay -->
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(109,94,249,0.12),transparent_50%),radial-gradient(circle_at_20%_80%,rgba(0,212,255,0.12),transparent_50%)] pointer-events-none z-0"></div>
+      
+      <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        <!-- Content -->
+        <div class="lg:col-span-7 flex flex-col items-start text-left space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold uppercase tracking-wider text-accent animate-pulse">
+            <span class="w-2 h-2 rounded-full bg-accent"></span> Disponible para nuevos proyectos
+          </div>
+          
+          <h1 class="text-4xl sm:text-6xl lg:text-7xl font-display font-bold tracking-tight leading-none text-white">
+            Hola, soy <br/>
+            <span class="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(109,94,249,0.3)]">César Adrián Morado</span>
+          </h1>
+          
+          <h2 class="text-xl sm:text-3xl font-display font-medium text-accent">
+            Frontend Developer Senior
+          </h2>
+          
+          <p class="text-text-muted text-base sm:text-lg max-w-xl">
+            Construyo experiencias digitales modernas, rápidas y escalables. Apasionado por la interactividad, el rendimiento excepcional y los detalles que marcan la diferencia.
+          </p>
+          
+          <div class="flex flex-wrap gap-4 pt-2">
+            <a href="#projects" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_25px_rgba(109,94,249,0.5)] text-white font-bold text-sm tracking-wide transition-all duration-300 transform hover:-translate-y-0.5 border border-primary/20 hover:border-accent">
+              Ver proyectos
+            </a>
+            <a href="#contact" class="px-8 py-3.5 rounded-full bg-card-dark/60 hover:bg-card-dark/80 text-white font-bold text-sm tracking-wide border border-white/10 hover:border-accent/40 transition-all duration-300 backdrop-blur-sm transform hover:-translate-y-0.5">
+              Contactar
+            </a>
+          </div>
+        </div>
+
+        <!-- 3D Futuristic Wireframe Render (CSS/HTML) -->
+        <div class="lg:col-span-5 hidden lg:flex justify-center items-center relative h-[450px]">
+          <!-- Glowing mesh container -->
+          <div class="relative w-[320px] h-[320px] flex items-center justify-center">
+            <!-- Glow background -->
+            <div class="absolute inset-0 bg-primary/20 rounded-full blur-[80px] animate-pulse"></div>
+            <!-- Outer Ring -->
+            <div class="absolute w-full h-full rounded-full border border-dashed border-accent/30 animate-[spin_40s_linear_infinite]"></div>
+            <!-- Middle Ring -->
+            <div class="absolute w-[80%] h-[80%] rounded-full border border-primary/40 animate-[spin_20s_linear_infinite_reverse]"></div>
+            <!-- Inner Orb -->
+            <div class="absolute w-[60%] h-[60%] rounded-full bg-gradient-to-tr from-primary to-accent opacity-20 blur-[10px] animate-pulse"></div>
+            <!-- Futuristic Floating Cubes (CSS Art) -->
+            <div class="absolute w-24 h-24 bg-card-dark/70 border-2 border-accent rounded-2xl flex items-center justify-center transform -rotate-12 hover:rotate-12 transition-transform duration-500 shadow-2xl backdrop-blur-md">
+              <span class="text-4xl text-accent font-display font-bold">&lt;/&gt;</span>
+            </div>
+            <!-- Floating particles and icons around -->
+            <div class="absolute -top-4 right-10 w-8 h-8 rounded-full bg-[#dd0031]/10 border border-[#dd0031]/30 flex items-center justify-center text-[#dd0031] text-[10px] font-bold shadow-[0_0_10px_rgba(221,0,49,0.3)] animate-bounce">Ng</div>
+            <div class="absolute bottom-4 -left-2 w-10 h-10 rounded-full bg-[#61dafb]/10 border border-[#61dafb]/30 flex items-center justify-center text-[#61dafb] text-xs font-bold shadow-[0_0_10px_rgba(97,218,251,0.3)] animate-bounce [animation-delay:1s]">Re</div>
+            <div class="absolute bottom-16 right-0 w-8 h-8 rounded-full bg-[#ff5d00]/10 border border-[#ff5d00]/30 flex items-center justify-center text-[#ff5d00] text-xs font-bold shadow-[0_0_10px_rgba(255,93,0,0.3)] animate-bounce [animation-delay:1.5s]">As</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE MÍ SECTION -->
+    <section id="about" class="py-24 px-4 max-w-7xl mx-auto relative space-y-24">
+      <div class="absolute top-0 right-0 w-80 h-80 bg-secondary/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <div class="absolute bottom-1/4 left-0 w-80 h-80 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <!-- 1. Hero / Main Info Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <!-- Columna izquierda: Tarjeta Premium -->
+        <div class="lg:col-span-5 relative group" id="about-card-anim">
+          <div class="absolute -inset-2 bg-gradient-to-r from-primary to-accent rounded-3xl opacity-30 blur-lg group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+          <div class="relative rounded-3xl border border-white/10 overflow-hidden bg-card-dark shadow-2xl p-6 space-y-6 tilt-card">
+            <!-- Marco glow con foto -->
+            <div class="relative aspect-square w-full rounded-2xl overflow-hidden border border-white/10 group-hover:border-accent/50 transition-colors duration-500 shadow-inner">
+              <div class="absolute inset-0 bg-gradient-to-t from-bg-dark/80 via-transparent to-transparent z-10"></div>
+              <img src="/1757554006561.jpg" alt="César Adrián Morado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+
+            <!-- Metadata List -->
+            <div class="space-y-3 font-sans text-sm text-text-muted">
+              <div class="flex items-center gap-3">
+                <span class="text-accent text-base select-none">💻</span>
+                <span class="font-semibold text-white">Frontend Developer</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-accent text-base select-none">📍</span>
+                <span>Celaya, Guanajuato, México</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-accent text-base select-none">🏛️</span>
+                <span>Instituto Electoral de Guanajuato</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-accent text-base select-none">🎓</span>
+                <span>Ingeniero en Tecnologías de la Información</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-accent text-base select-none">🎓</span>
+                <span>Maestría en Desarrollo de Interfaces Web (UNIR)</span>
+              </div>
+            </div>
+
+            <!-- Download CV Button -->
+            <a 
+              href="/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf" 
+              download 
+              class="block w-full py-3.5 text-center text-xs font-bold text-white bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_20px_rgba(109,94,249,0.4)] rounded-xl border border-primary/20 hover:border-accent transition-all duration-300 uppercase tracking-wider cursor-pointer"
+            >
+              Descargar CV
+            </a>
+          </div>
+        </div>
+
+        <!-- Columna derecha: Historia profesional -->
+        <div class="lg:col-span-7 space-y-6">
+          <h2 class="text-4xl sm:text-5xl font-display font-bold text-white tracking-tight">
+            Sobre <span class="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Mí</span>
+          </h2>
+          
+          <div class="space-y-4 text-text-muted text-base sm:text-lg leading-relaxed font-sans">
+            <p>
+              Me especializo en diseñar y construir interfaces de usuario de alto impacto: rápidas, accesibles y con un rendimiento excepcional. Creo firmemente que el desarrollo frontend es el puente que conecta la complejidad de los datos con una experiencia de usuario intuitiva y fluida.
+            </p>
+            <p>
+              A lo largo de mi trayectoria, he diseñado y desarrollado sistemas web en sectores de alta exigencia (salud, electoral y civil), enfocándome en crear arquitecturas sólidas, escalables y fáciles de mantener utilizando tecnologías modernas como Angular, TypeScript, Astro y C#.
+            </p>
+            <p>
+              Mi enfoque no solo está en escribir código limpio, sino también en el impacto real del producto: optimizar tiempos de carga, asegurar la accesibilidad universal y alinear las mejores prácticas de UX con las necesidades operativas de los usuarios.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Filosofía, Actualmente & Hacia dónde voy (3-Card Grid) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Filosofía -->
+        <div class="glass-card p-8 rounded-3xl border border-white/5 bg-card-dark/40 flex flex-col justify-between space-y-6">
+          <div>
+            <div class="flex items-center gap-2 mb-4 text-accent">
+              <span class="text-xl select-none">💡</span>
+              <h3 class="text-lg font-display font-bold text-white">Mi filosofía como desarrollador</h3>
+            </div>
+            <p class="text-text-muted text-xs sm:text-sm leading-relaxed font-sans italic">
+              "Creo que una buena interfaz no solo debe verse bien; debe facilitar el trabajo de las personas, resolver problemas reales y ofrecer una experiencia intuitiva. Mi objetivo es construir aplicaciones mantenibles, rápidas y accesibles, cuidando tanto la experiencia del usuario como la calidad del código."
+            </p>
+          </div>
+          <div class="w-12 h-1 bg-gradient-to-r from-primary to-accent rounded-full"></div>
+        </div>
+
+        <!-- Actualmente -->
+        <div class="glass-card p-8 rounded-3xl border border-white/5 bg-card-dark/40 space-y-4">
+          <div class="flex items-center gap-2 text-accent">
+            <span class="text-xl select-none">📌</span>
+            <h3 class="text-lg font-display font-bold text-white">Actualmente</h3>
+          </div>
+          <div class="space-y-3 font-sans text-xs sm:text-sm text-text-muted">
+            <div class="flex items-start gap-2">
+              <span class="text-accent select-none mt-0.5">🏛️</span>
+              <div>
+                <strong class="text-white block leading-none">Instituto Electoral</strong>
+                <span class="text-xs">Estado de Guanajuato</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-accent select-none">💻</span>
+              <span class="text-white">Ingeniero de Software</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-accent select-none">🎓</span>
+              <span>Estudiando Maestría (Interfaces Web)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-accent select-none">📍</span>
+              <span>Celaya, Guanajuato</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ¿Hacia dónde voy? -->
+        <div class="glass-card p-8 rounded-3xl border border-white/5 bg-card-dark/40 flex flex-col justify-between space-y-6">
+          <div>
+            <div class="flex items-center gap-2 mb-4 text-accent">
+              <span class="text-xl select-none">🎯</span>
+              <h3 class="text-lg font-display font-bold text-white">¿Hacia dónde voy?</h3>
+            </div>
+            <p class="text-text-muted text-xs sm:text-sm leading-relaxed font-sans">
+              Mi objetivo es seguir especializándome en el desarrollo Frontend moderno, arquitectura de aplicaciones web, experiencia de usuario y desarrollo de soluciones escalables para organizaciones públicas y privadas.
+            </p>
+          </div>
+          <div class="w-12 h-1 bg-gradient-to-r from-secondary to-accent rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- 3. Lo que hago & Estadísticas -->
+      <div class="space-y-12">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-display font-bold text-white">Lo que hago</h3>
+          <p class="text-text-muted text-sm font-sans">Especialidades técnicas enfocadas en el rendimiento, la accesibilidad y el diseño Premium.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(109,94,249,0.15)] transition-all duration-300 space-y-4">
+            <div class="text-3xl select-none">💻</div>
+            <h4 class="text-base font-display font-bold text-white">Desarrollo Frontend</h4>
+            <p class="text-text-muted text-xs sm:text-sm font-sans leading-relaxed">Interfaces modernas con Angular, React y Astro.</p>
+          </div>
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 hover:border-secondary/50 hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all duration-300 space-y-4">
+            <div class="text-3xl select-none">⚡</div>
+            <h4 class="text-base font-display font-bold text-white">Optimización</h4>
+            <p class="text-text-muted text-xs sm:text-sm font-sans leading-relaxed">Aplicaciones rápidas y accesibles.</p>
+          </div>
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 hover:border-accent/50 hover:shadow-[0_0_20px_rgba(0,212,255,0.15)] transition-all duration-300 space-y-4">
+            <div class="text-3xl select-none">📱</div>
+            <h4 class="text-base font-display font-bold text-white">Responsive</h4>
+            <p class="text-text-muted text-xs sm:text-sm font-sans leading-relaxed">Experiencias para cualquier dispositivo.</p>
+          </div>
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-all duration-300 space-y-4">
+            <div class="text-3xl select-none">🚀</div>
+            <h4 class="text-base font-display font-bold text-white">Aprendizaje continuo</h4>
+            <p class="text-text-muted text-xs sm:text-sm font-sans leading-relaxed">Siempre explorando nuevas tecnologías.</p>
+          </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 pt-10 border-t border-white/10" id="stats-container-about">
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 text-center">
+            <div class="text-3xl sm:text-4xl font-display font-bold text-accent stat-number" data-target="10">0</div>
+            <div class="text-[10px] sm:text-xs font-semibold text-text-muted uppercase tracking-wider mt-2 font-sans">Años aprendiendo tecnología</div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 text-center">
+            <div class="text-3xl sm:text-4xl font-display font-bold text-accent stat-number" data-target="8">0</div>
+            <div class="text-[10px] sm:text-xs font-semibold text-text-muted uppercase tracking-wider mt-2 font-sans">Proyectos destacados</div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 text-center">
+            <div class="text-3xl sm:text-4xl font-display font-bold text-accent stat-number" data-target="4">0</div>
+            <div class="text-[10px] sm:text-xs font-semibold text-text-muted uppercase tracking-wider mt-2 font-sans">Frameworks principales</div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 text-center">
+            <div class="text-3xl sm:text-4xl font-display font-bold text-accent stat-number" data-target="100">0</div>
+            <div class="text-[10px] sm:text-xs font-semibold text-text-muted uppercase tracking-wider mt-2 font-sans">% Aprendizaje continuo</div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 text-center col-span-2 sm:col-span-1">
+            <div class="text-2xl sm:text-3xl font-display font-bold text-accent leading-normal select-none">Frontend</div>
+            <div class="text-[10px] sm:text-xs font-semibold text-text-muted uppercase tracking-wider mt-2 font-sans">Especializado</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Tecnologías principales -->
+      <div class="space-y-8">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-display font-bold text-white">Tecnologías principales</h3>
+          <p class="text-text-muted text-sm font-sans">El núcleo de herramientas y lenguajes en los que destaco.</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
+          {['Angular', 'TypeScript', 'Astro', 'C#', '.NET', 'FastAPI', 'Oracle', 'SQL Server', 'Tailwind CSS', 'Git'].map((tech) => {
+            const glowColors: Record<string, string> = {
+              'Angular': 'hover:border-[#dd0031] hover:shadow-[0_0_15px_rgba(221,0,49,0.2)]',
+              'TypeScript': 'hover:border-[#3178c6] hover:shadow-[0_0_15px_rgba(49,120,198,0.2)]',
+              'Astro': 'hover:border-[#ff5d00] hover:shadow-[0_0_15px_rgba(255,93,0,0.2)]',
+              'C#': 'hover:border-[#178600] hover:shadow-[0_0_15px_rgba(23,134,0,0.2)]',
+              '.NET': 'hover:border-[#512bd4] hover:shadow-[0_0_15px_rgba(81,43,212,0.2)]',
+              'FastAPI': 'hover:border-[#009688] hover:shadow-[0_0_15px_rgba(0,150,136,0.2)]',
+              'Oracle': 'hover:border-[#f80000] hover:shadow-[0_0_15px_rgba(248,0,0,0.2)]',
+              'SQL Server': 'hover:border-[#e38c00] hover:shadow-[0_0_15px_rgba(227,140,0,0.2)]',
+              'Tailwind CSS': 'hover:border-[#38bdf8] hover:shadow-[0_0_15px_rgba(56,189,248,0.2)]',
+              'Git': 'hover:border-[#f05032] hover:shadow-[0_0_15px_rgba(240,80,50,0.2)]',
+            };
+            return (
+              <div class={`glass-card p-4 rounded-xl border border-white/5 text-center flex flex-col items-center justify-center gap-2 group transition-all duration-300 ${glowColors[tech] || 'hover:border-accent'}`}>
+                <span class="text-xs font-semibold text-text-muted group-hover:text-white transition-colors duration-300 font-display uppercase tracking-wider">{tech}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- 6. Certificaciones (Carrusel elegante con Lightbox) -->
+      <div class="space-y-8">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <h3 class="text-2xl sm:text-3xl font-display font-bold text-white">Acreditaciones y Certificaciones</h3>
+          <p class="text-text-muted text-sm font-sans">Mis acreditaciones más importantes en el ecosistema Frontend. Haz clic para ampliar.</p>
+        </div>
+
+        <div class="relative overflow-hidden py-4">
+          <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-8" id="carousel-certs-about">
+            {[
+              { title: 'Iniciación con IA', issuer: 'Santander | Google', date: '2025', img: '/1.- Certificadi Iniciacion con IA.jpeg' },
+              { title: 'Desarrollo con IA', issuer: 'Santander | Google', date: '2025', img: '/2.- Certificado desarrollo con IA.jpeg' },
+              { title: 'Ciberseguridad Profesional', issuer: 'Santander', date: '2025', img: '/3.-Certificado ciberseguridad.jpeg' },
+              { title: 'Proyectos Ágiles (Mod 1)', issuer: 'Google', date: '2025', img: '/1 Proyectos Agiles.png' },
+              { title: 'Proyectos Ágiles (Mod 2)', issuer: 'Google', date: '2025', img: '/2 Proyectos Agiles.png' },
+              { title: 'Habilidades Blandas (Mod 1)', issuer: 'Google', date: '2025', img: '/1 Soft Skills.png' },
+              { title: 'Habilidades Blandas (Mod 2)', issuer: 'Google', date: '2025', img: '/2 Soft Skills.png' },
+              { title: 'Idioma Inglés', issuer: 'Constancias e Idiomas', date: '2025', img: '/constanciasI.png' }
+            ].map((cert) => (
+              <div 
+                class="flex-shrink-0 w-80 snap-center glass-card overflow-hidden rounded-2xl border border-white/5 hover:border-accent hover:shadow-[0_0_20px_rgba(0,212,255,0.2)] transition-all duration-300 group cursor-pointer flex flex-col justify-between lightbox-trigger animate-reveal"
+                data-src={cert.img}
+                data-caption={`${cert.title} — ${cert.issuer} (${cert.date})`}
+              >
+                <div class="relative aspect-video w-full overflow-hidden border-b border-white/5 bg-card-dark flex items-center justify-center">
+                  <img src={cert.img} alt={cert.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="px-4 py-2 rounded-full bg-accent text-bg-dark font-bold text-xs uppercase tracking-wider">Ver certificado</span>
+                  </div>
+                </div>
+                <div class="p-5 flex flex-col justify-between flex-grow">
+                  <div>
+                    <span class="text-[10px] font-bold text-accent uppercase tracking-wider">{cert.issuer}</span>
+                    <h4 class="text-sm font-display font-bold text-white mt-1 leading-tight">{cert.title}</h4>
+                  </div>
+                  <div class="flex items-center justify-between border-t border-white/5 pt-3 mt-3">
+                    <span class="text-[10px] text-text-muted">Fecha: {cert.date}</span>
+                    <span class="text-[10px] font-bold text-primary group-hover:text-accent flex items-center gap-1 transition-colors duration-300">
+                      Ampliar &rarr;
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- EXPERIENCIA SECTION -->
+    <section id="experience" class="py-24 px-4 max-w-7xl mx-auto relative">
+      <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white">
+          Trayectoria Profesional
+        </h2>
+        <p class="text-text-muted font-sans">
+          Un repaso de mi experiencia laboral y evolución técnica a lo largo de los años.
+        </p>
+      </div>
+
+      <!-- Modern Timeline -->
+      <div class="relative border-l border-white/15 max-w-3xl mx-auto pl-8 space-y-12">
+        {experiences.map((exp, index) => (
+          <div class="relative timeline-item" data-index={index}>
+            <!-- Timeline dot -->
+            <span class="absolute -left-[41px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border border-accent bg-bg-dark text-accent shadow-[0_0_10px_rgba(0,212,255,0.3)]">
+              <span class="h-2 w-2 rounded-full bg-accent animate-ping"></span>
+            </span>
+            <!-- Experience Card -->
+            <div class="glass-card p-6 sm:p-8 rounded-2xl space-y-4 hover:shadow-[0_0_30px_rgba(109,94,249,0.15)] transition-all duration-300">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 class="text-xl font-display font-bold text-white">{exp.role}</h3>
+                  <span class="text-accent font-semibold text-sm">{exp.company}</span>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-text-muted self-start sm:self-center">
+                  {exp.period}
+                </span>
+              </div>
+              <ul class="list-disc pl-5 text-text-muted text-sm sm:text-base space-y-1.5 font-sans">
+                {exp.bullets.map((bullet) => (
+                  <li>{bullet}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- GITHUB SECTION -->
+    <section id="github" class="py-24 px-4 bg-card-dark/30 border-y border-white/5 relative overflow-hidden">
+      <!-- Glow background -->
+      <div class="absolute bottom-0 right-10 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Text -->
+        <div class="lg:col-span-5 space-y-6">
+          <h2 class="text-3xl sm:text-4xl font-display font-bold text-white">
+            Código en Tiempo Real
+          </h2>
+          <p class="text-text-muted leading-relaxed">
+            Consola interactiva que simula la ingesta en vivo de mi perfil de GitHub. Monitorización de commits, contribuciones y los lenguajes más utilizados.
+          </p>
+          <a href="https://github.com/cesarmorado" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-primary transition-colors duration-300">
+            Explorar perfil en GitHub &rarr;
+          </a>
+        </div>
+
+        <!-- Interactive Terminal Simulator -->
+        <div class="lg:col-span-7 glass-panel rounded-2xl overflow-hidden shadow-2xl text-left border border-white/10 bg-bg-dark/80">
+          <!-- Terminal Header -->
+          <div class="flex items-center justify-between px-4 py-3 bg-card-dark border-b border-white/5">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-[#ff5f56]"></span>
+              <span class="w-3 h-3 rounded-full bg-[#ffbd2e]"></span>
+              <span class="w-3 h-3 rounded-full bg-[#27c93f]"></span>
+            </div>
+            <span class="text-xs text-text-muted font-mono">github-dashboard.sh</span>
+            <div class="w-4"></div>
+          </div>
+          <!-- Terminal Body -->
+          <div class="p-6 font-mono text-xs sm:text-sm space-y-4 max-h-[350px] overflow-y-auto" id="github-terminal">
+            <div><span class="text-accent">$</span> fetch --user cesarmorado</div>
+            <div class="text-[#27c93f] animate-pulse">Connecting to api.github.com...</div>
+            <div class="pl-4 border-l border-white/10 space-y-2 py-2">
+              <div><strong class="text-white">Usuario:</strong> César Adrián Morado</div>
+              <div><strong class="text-white">Repos Públicos:</strong> 42</div>
+              <div><strong class="text-white">Seguidores:</strong> 128</div>
+              <div><strong class="text-white">Contribuciones (último año):</strong> <span class="text-accent">1,452 commits</span></div>
+            </div>
+            
+            <div><span class="text-accent">$</span> list --languages</div>
+            <!-- Language Bar -->
+            <div class="space-y-2 py-2">
+              <div class="flex items-center gap-2">
+                <span class="w-20 text-white font-semibold">TypeScript</span>
+                <div class="flex-grow bg-white/5 h-2 rounded-full overflow-hidden">
+                  <div class="bg-primary h-full rounded-full" style="width: 48%"></div>
+                </div>
+                <span class="text-text-muted">48%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-20 text-white font-semibold">Angular</span>
+                <div class="flex-grow bg-white/5 h-2 rounded-full overflow-hidden">
+                  <div class="bg-accent h-full rounded-full" style="width: 32%"></div>
+                </div>
+                <span class="text-text-muted">32%</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-20 text-white font-semibold">CSS/HTML</span>
+                <div class="flex-grow bg-white/5 h-2 rounded-full overflow-hidden">
+                  <div class="bg-secondary h-full rounded-full" style="width: 20%"></div>
+                </div>
+                <span class="text-text-muted">20%</span>
+              </div>
+            </div>
+            
+            <div><span class="text-accent">$</span> <span class="animate-pulse">_</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROYECTOS SECTION (Galería de Proyectos Importantes) -->
+    <section id="projects" class="py-24 px-4 bg-card-dark/30 border-y border-white/5 relative overflow-hidden">
+      <!-- Glow background -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+          <h2 class="text-3xl sm:text-4xl font-display font-bold text-white">
+            Galería de Proyectos Importantes
+          </h2>
+          <p class="text-text-muted">
+            Una selección de mis sistemas clave desarrollados a lo largo de mi carrera. Haz clic en "Ver proyecto" para explorar los detalles.
+          </p>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+          {projects.map((proj) => (
+            <div 
+              class={`glass-card rounded-2xl overflow-hidden group flex flex-col h-full project-card shadow-lg hover:shadow-[0_0_30px_rgba(109,94,249,0.2)] border border-white/5 transition-all duration-500 hover:scale-[1.02] tilt-card cursor-pointer project-trigger-card`}
+              data-project={JSON.stringify(proj)}
+            >
+              <!-- Image Container -->
+              <div class="relative overflow-hidden aspect-video border-b border-white/5 bg-bg-dark flex items-center justify-center">
+                <img src={proj.image} alt={proj.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <span class="px-4 py-2 rounded-full bg-accent text-bg-dark font-bold text-xs uppercase tracking-wider shadow-lg">Ver Detalles</span>
+                </div>
+              </div>
+              
+              <!-- Content -->
+              <div class="p-6 flex flex-col flex-grow space-y-4 justify-between">
+                <div class="space-y-2">
+                  <h3 class="text-xl font-display font-bold text-white group-hover:text-accent transition-colors duration-300">{proj.title}</h3>
+                  <p class="text-text-muted text-xs sm:text-sm font-sans line-clamp-3 leading-relaxed">{proj.shortDesc}</p>
+                </div>
+                
+                <div class="space-y-4">
+                  <!-- Techs Badges -->
+                  <div class="flex flex-wrap gap-1.5">
+                    {proj.techs.map((tech) => (
+                      <span class="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[9px] font-bold text-text-muted uppercase tracking-wider">{tech}</span>
+                    ))}
+                  </div>
+                  
+                  <!-- View project button -->
+                  <button class="w-full py-2.5 text-center text-xs font-bold text-white bg-primary hover:bg-primary/80 rounded-lg border border-primary/20 hover:border-accent/40 transition-all duration-300 cursor-pointer">
+                    Ver proyecto
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD TECNOLÓGICO SECTION -->
+    <section id="skills" class="py-24 px-4 bg-card-dark/30 border-y border-white/5 relative overflow-hidden">
+      <!-- Glow effect background -->
+      <div class="absolute -bottom-48 left-10 w-96 h-96 bg-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+          <h2 class="text-3xl sm:text-4xl font-display font-bold text-white">
+            Dashboard Tecnológico
+          </h2>
+          <p class="text-text-muted">
+            Tecnologías que utilizo actualmente en mis proyectos. Tarjetas premium interactivas con animaciones en hover y barras de progreso.
+          </p>
+        </div>
+
+        <!-- Tech Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="skills-grid">
+          {skills.map((skill) => (
+            <div 
+              class={`glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/40 flex flex-col justify-between gap-4 group transition-all duration-300 cursor-pointer tilt-card ${skill.glow}`}
+              title={`${skill.name} - ${skill.level} (${skill.percentage}%)`}
+            >
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <!-- Logo bubble -->
+                  <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300 border border-white/10 group-hover:border-accent/30 shadow-inner">
+                    <span class={`text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-display select-none`}>
+                      {skill.logo}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 class="font-display font-bold text-sm text-text-muted group-hover:text-white transition-colors duration-300">{skill.name}</h4>
+                    <span class="text-[9px] font-semibold text-accent uppercase tracking-wider font-sans">{skill.level}</span>
+                  </div>
+                </div>
+                <!-- Years badge -->
+                <div class="text-right">
+                  <span class="text-[10px] text-text-muted block font-sans">Experiencia</span>
+                  <span class="text-xs font-bold text-white">{skill.years} {skill.years === 1 ? 'año' : 'años'}</span>
+                </div>
+              </div>
+
+              <!-- Animated Mastery Bar -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-[10px] text-text-muted font-sans">
+                  <span>Dominio</span>
+                  <span class="font-bold text-white">{skill.percentage}%</span>
+                </div>
+                <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden border border-white/5">
+                  <div class={`h-full rounded-full ${skill.barColor}`} style={`width: ${skill.percentage}%`}></div>
+                </div>
+              </div>
+
+              <!-- Last used metadata -->
+              <div class="pt-2.5 border-t border-white/5 flex items-center justify-between text-[9px] text-text-muted font-sans">
+                <span>Último uso:</span>
+                <span class="font-medium text-white/80 truncate max-w-[150px]">{skill.lastUsed}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO SECTION -->
+    <section id="contact" class="py-24 px-4 max-w-4xl mx-auto relative">
+      <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+        <h2 class="text-3xl sm:text-4xl font-display font-bold text-white">
+          Iniciemos un Proyecto
+        </h2>
+        <p class="text-text-muted">
+          ¿Tienes una idea en mente o buscas un perfil Frontend Senior? Escríbeme y charlemos.
+        </p>
+      </div>
+
+      <!-- Glassmorphic Form -->
+      <div class="glass-panel p-6 sm:p-10 rounded-3xl relative overflow-hidden shadow-2xl">
+        <!-- Glow accents inside -->
+        <div class="absolute -top-32 -left-32 w-64 h-64 bg-primary/10 rounded-full blur-[60px] pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-32 w-64 h-64 bg-accent/10 rounded-full blur-[60px] pointer-events-none"></div>
+
+        <form id="contact-form" class="space-y-6 relative z-10">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label for="name" class="text-xs font-semibold uppercase tracking-wider text-text-muted">Nombre</label>
+              <input 
+                type="text" 
+                id="name" 
+                required 
+                placeholder="Juan Pérez" 
+                class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-accent transition-colors duration-300"
+              />
+              <span id="error-name" class="text-xs text-[#ff5f56] hidden">El nombre es requerido.</span>
+            </div>
+            
+            <div class="space-y-2">
+              <label for="email" class="text-xs font-semibold uppercase tracking-wider text-text-muted">Correo Electrónico</label>
+              <input 
+                type="email" 
+                id="email" 
+                required 
+                placeholder="juan@ejemplo.com" 
+                class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-accent transition-colors duration-300"
+              />
+              <span id="error-email" class="text-xs text-[#ff5f56] hidden">Ingresa un correo electrónico válido.</span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label for="subject" class="text-xs font-semibold uppercase tracking-wider text-text-muted">Asunto</label>
+            <input 
+              type="text" 
+              id="subject" 
+              required 
+              placeholder="Oportunidad laboral / Propuesta de proyecto" 
+              class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-accent transition-colors duration-300"
+            />
+            <span id="error-subject" class="text-xs text-[#ff5f56] hidden">El asunto es requerido.</span>
+          </div>
+
+          <div class="space-y-2">
+            <label for="message" class="text-xs font-semibold uppercase tracking-wider text-text-muted">Mensaje</label>
+            <textarea 
+              id="message" 
+              required 
+              rows="5" 
+              placeholder="Hola César, me gustaría hablar contigo sobre..." 
+              class="w-full px-4 py-3 bg-bg-dark/50 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-accent transition-colors duration-300 resize-none"
+            ></textarea>
+            <span id="error-message" class="text-xs text-[#ff5f56] hidden">El mensaje es requerido.</span>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            class="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_25px_rgba(109,94,249,0.5)] text-white font-bold text-sm tracking-wide uppercase transition-all duration-300 transform hover:-translate-y-0.5 border border-primary/20 hover:border-accent flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Enviar Mensaje</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4">
+              <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Success Toast -->
+        <div id="form-success" class="absolute inset-0 bg-bg-dark/95 flex flex-col items-center justify-center text-center p-6 space-y-4 opacity-0 pointer-events-none transition-all duration-300">
+          <div class="w-16 h-16 rounded-full bg-[#27c93f]/15 border border-[#27c93f]/30 flex items-center justify-center text-[#27c93f] text-3xl font-bold animate-bounce">
+            ✓
+          </div>
+          <h3 class="text-xl font-display font-bold text-white">¡Mensaje Enviado Exitosamente!</h3>
+          <p class="text-text-muted text-sm max-w-sm">Gracias por ponerte en contacto. Te responderé lo antes posible para concretar detalles.</p>
+          <button id="reset-form" class="px-6 py-2 rounded-full border border-white/10 hover:border-accent/40 text-xs font-semibold text-text-muted hover:text-white transition-colors duration-300 cursor-pointer">Enviar otro mensaje</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Lightbox Modal -->
+    <div id="global-lightbox" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg-dark/95 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+      <div class="max-w-4xl w-full flex flex-col items-center justify-center relative scale-95 transition-transform duration-300" id="lightbox-container">
+        <button id="close-lightbox" class="absolute -top-12 right-0 text-text-muted hover:text-white text-4xl font-bold cursor-pointer bg-transparent border-0" aria-label="Cerrar modal">&times;</button>
+        <div class="relative w-full border border-white/10 rounded-2xl overflow-hidden shadow-2xl bg-card-dark flex items-center justify-center">
+          <img id="lightbox-img" src="" alt="" class="max-h-[75vh] w-auto max-w-full object-contain" />
+        </div>
+        <p id="lightbox-caption" class="text-white font-display mt-4 font-semibold text-center text-sm sm:text-base"></p>
+        <a href="" id="lightbox-download" download class="mt-4 px-6 py-2.5 rounded-full bg-primary hover:bg-primary/80 border border-primary/20 text-white text-xs font-bold uppercase tracking-wider transition-all duration-300" target="_blank">Descargar / Ver original</a>
+      </div>
+    </div>
+
+    <!-- Project Detailed Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-bg-dark/95 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+      <div class="w-full max-w-2xl glass-panel rounded-3xl p-6 sm:p-8 relative shadow-2xl scale-95 transition-transform duration-300 overflow-y-auto max-h-[90vh] bg-card-dark border border-white/10" id="project-modal-container">
+        <button id="close-project-modal" class="absolute top-4 right-4 text-text-muted hover:text-white text-3xl font-bold cursor-pointer bg-transparent border-0 outline-none" aria-label="Cerrar modal">&times;</button>
+        
+        <div class="space-y-6 text-left">
+          <!-- Project Image -->
+          <div class="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10 bg-bg-dark flex items-center justify-center shadow-inner">
+            <img id="pm-image" src="" alt="" class="w-full h-full object-cover" />
+          </div>
+          
+          <div>
+            <h3 id="pm-title" class="text-2xl sm:text-3xl font-display font-bold text-white"></h3>
+            <p id="pm-short-desc" class="text-accent text-sm font-semibold mt-1 font-sans"></p>
+          </div>
+          
+          <!-- Description -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-display font-bold text-white uppercase tracking-wider border-b border-white/5 pb-1">Sobre el proyecto</h4>
+            <p id="pm-desc" class="text-text-muted text-sm font-sans leading-relaxed"></p>
+          </div>
+          
+          <!-- Technologies -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-display font-bold text-white uppercase tracking-wider border-b border-white/5 pb-1">Tecnologías Utilizadas</h4>
+            <div id="pm-techs" class="flex flex-wrap gap-2 pt-1"></div>
+          </div>
+          
+          <!-- Participation -->
+          <div class="space-y-2">
+            <h4 class="text-xs font-display font-bold text-white uppercase tracking-wider border-b border-white/5 pb-1">Mi Participación</h4>
+            <ul id="pm-participation" class="list-disc pl-5 text-text-muted text-sm space-y-2 font-sans pt-1"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initHeroCanvas() {
+    const canvas = document.getElementById('hero-particles') as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const particles: Array<{ x: number; y: number; vx: number; vy: number; radius: number; color: string }> = [];
+    const particleCount = Math.min(100, Math.floor((width * height) / 15000)); // Responsive count
+
+    // Palette matches our primary, secondary, and accent colors
+    const colors = [
+      'rgba(109, 94, 249, 0.4)', // Primary Glow
+      'rgba(139, 92, 246, 0.4)', // Secondary Purple
+      'rgba(0, 212, 255, 0.5)'   // Accent Cyan
+    ];
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    }
+
+    let mouseX = width / 2;
+    let mouseY = height / 2;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    let animationFrameId: number;
+
+    function animate() {
+      ctx!.clearRect(0, 0, width, height);
+
+      // Draw and update particles
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Boundary collision
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        // Attract lightly to mouse position
+        const dx = mouseX - p.x;
+        const dy = mouseY - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 180) {
+          p.x += (dx / dist) * 0.3;
+          p.y += (dy / dist) * 0.3;
+        }
+
+        ctx!.beginPath();
+        ctx!.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx!.fillStyle = p.color;
+        ctx!.fill();
+      });
+
+      // Draw web links between close particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const pi = particles[i];
+          const pj = particles[j];
+          const dx = pi.x - pj.x;
+          const dy = pi.y - pj.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            ctx!.beginPath();
+            ctx!.moveTo(pi.x, pi.y);
+            ctx!.lineTo(pj.x, pj.y);
+            ctx!.strokeStyle = `rgba(109, 94, 249, ${0.15 * (1 - dist / 120)})`;
+            ctx!.lineWidth = 0.5;
+            ctx!.stroke();
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    document.addEventListener('astro:before-preparation', () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+    }, { once: true });
+  }
+
+  function initStatsAnimation() {
+    const numbers = document.querySelectorAll('.stat-number');
+    if (numbers.length === 0) return;
+
+    numbers.forEach((num) => {
+      const target = parseInt(num.getAttribute('data-target') || '0', 10);
+      
+      gsap.fromTo(num, 
+        { textContent: '0' },
+        {
+          textContent: target.toString(),
+          duration: 2.5,
+          ease: 'power2.out',
+          snap: { textContent: 1 },
+          scrollTrigger: {
+            trigger: num,
+            start: 'top 90%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+    });
+  }
+
+  function initScrollReveals() {
+    // Experience timeline reveals
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    timelineItems.forEach((item) => {
+      gsap.from(item, {
+        opacity: 0,
+        x: -50,
+        duration: 0.8,
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 80%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+  }
+
+  function initTiltCards() {
+    const cards = document.querySelectorAll('.tilt-card');
+    cards.forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const mouseEvent = e as MouseEvent;
+        const rect = card.getBoundingClientRect();
+        const x = mouseEvent.clientX - rect.left - rect.width / 2;
+        const y = mouseEvent.clientY - rect.top - rect.height / 2;
+        
+        gsap.to(card, {
+          rotateX: -y / 15,
+          rotateY: x / 15,
+          transformPerspective: 800,
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+      });
+
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        });
+      });
+    });
+  }
+
+  function initGlobalLightbox() {
+    const triggers = document.querySelectorAll('.lightbox-trigger');
+    const lightbox = document.getElementById('global-lightbox');
+    const container = document.getElementById('lightbox-container');
+    const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
+    const caption = document.getElementById('lightbox-caption');
+    const download = document.getElementById('lightbox-download') as HTMLAnchorElement | null;
+    const closeBtn = document.getElementById('close-lightbox');
+
+    if (!lightbox || !container || !img || !caption || !download || !closeBtn) return;
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const src = trigger.getAttribute('data-src') || '';
+        const text = trigger.getAttribute('data-caption') || '';
+        
+        img.src = src;
+        caption.textContent = text;
+        download.href = src;
+
+        lightbox.classList.remove('pointer-events-none');
+        gsap.to(lightbox, { opacity: 1, duration: 0.3 });
+        gsap.to(container, { scale: 1, duration: 0.3, ease: 'back.out(1.4)' });
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    const hideLightbox = () => {
+      gsap.to(container, { scale: 0.95, duration: 0.2 });
+      gsap.to(lightbox, {
+        opacity: 0,
+        duration: 0.2,
+        onComplete: () => {
+          lightbox.classList.add('pointer-events-none');
+          document.body.style.overflow = '';
+        }
+      });
+    };
+
+    closeBtn.addEventListener('click', hideLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) hideLightbox();
+    });
+  }
+
+  function initProjectModal() {
+    const cards = document.querySelectorAll('.project-trigger-card');
+    const modal = document.getElementById('project-modal');
+    const container = document.getElementById('project-modal-container');
+    const closeBtn = document.getElementById('close-project-modal');
+    
+    const pmImage = document.getElementById('pm-image') as HTMLImageElement | null;
+    const pmTitle = document.getElementById('pm-title');
+    const pmShortDesc = document.getElementById('pm-short-desc');
+    const pmDesc = document.getElementById('pm-desc');
+    const pmTechs = document.getElementById('pm-techs');
+    const pmParticipation = document.getElementById('pm-participation');
+
+    if (!modal || !closeBtn || !container) return;
+
+    const openModal = (proj: any) => {
+      if (pmImage) pmImage.src = proj.image;
+      if (pmTitle) pmTitle.textContent = proj.title;
+      if (pmShortDesc) pmShortDesc.textContent = proj.shortDesc;
+      if (pmDesc) pmDesc.textContent = proj.desc;
+      
+      // Render Techs
+      if (pmTechs) {
+        pmTechs.innerHTML = '';
+        proj.techs.forEach((tech: string) => {
+          const span = document.createElement('span');
+          span.className = 'px-3 py-1 rounded-md bg-white/5 border border-white/10 text-xs font-bold text-text-muted uppercase tracking-wider';
+          span.textContent = tech;
+          pmTechs.appendChild(span);
+        });
+      }
+
+      // Render Participation
+      if (pmParticipation) {
+        pmParticipation.innerHTML = '';
+        proj.participation.forEach((part: string) => {
+          const li = document.createElement('li');
+          li.textContent = part;
+          pmParticipation.appendChild(li);
+        });
+      }
+
+      modal.classList.remove('pointer-events-none');
+      gsap.to(modal, { opacity: 1, duration: 0.3 });
+      gsap.to(container, { scale: 1, duration: 0.3, ease: 'back.out(1.4)' });
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+      gsap.to(container, { scale: 0.95, duration: 0.2 });
+      gsap.to(modal, {
+        opacity: 0,
+        duration: 0.2,
+        onComplete: () => {
+          modal.classList.add('pointer-events-none');
+          document.body.style.overflow = '';
+        }
+      });
+    };
+
+    cards.forEach((card) => {
+      card.addEventListener('click', (e) => {
+        // Prevent trigger if clicking on button inside it since it already triggers the card click event
+        const raw = card.getAttribute('data-project');
+        if (!raw) return;
+        const proj = JSON.parse(raw);
+        openModal(proj);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  function initFormValidation() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const successToast = document.getElementById('form-success');
+    const resetBtn = document.getElementById('reset-form');
+
+    if (!form || !successToast || !resetBtn) return;
+
+    const nameIn = document.getElementById('name') as HTMLInputElement;
+    const emailIn = document.getElementById('email') as HTMLInputElement;
+    const subjectIn = document.getElementById('subject') as HTMLInputElement;
+    const messageIn = document.getElementById('message') as HTMLTextAreaElement;
+
+    const errName = document.getElementById('error-name');
+    const errEmail = document.getElementById('error-email');
+    const errSubject = document.getElementById('error-subject');
+    const errMessage = document.getElementById('error-message');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      let hasError = false;
+
+      // Validate Name
+      if (!nameIn.value.trim()) {
+        errName?.classList.remove('hidden');
+        hasError = true;
+      } else {
+        errName?.classList.add('hidden');
+      }
+
+      // Validate Email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailIn.value.trim() || !emailRegex.test(emailIn.value)) {
+        errEmail?.classList.remove('hidden');
+        hasError = true;
+      } else {
+        errEmail?.classList.add('hidden');
+      }
+
+      // Validate Subject
+      if (!subjectIn.value.trim()) {
+        errSubject?.classList.remove('hidden');
+        hasError = true;
+      } else {
+        errSubject?.classList.add('hidden');
+      }
+
+      // Validate Message
+      if (!messageIn.value.trim()) {
+        errMessage?.classList.remove('hidden');
+        hasError = true;
+      } else {
+        errMessage?.classList.add('hidden');
+      }
+
+      if (!hasError) {
+        // Show success layout with GSAP
+        successToast.classList.remove('pointer-events-none');
+        gsap.to(successToast, { opacity: 1, duration: 0.4 });
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      gsap.to(successToast, {
+        opacity: 0,
+        duration: 0.4,
+        onComplete: () => {
+          successToast.classList.add('pointer-events-none');
+        }
+      });
+    });
+  }
+
+  const setupPage = () => {
+    initHeroCanvas();
+    initStatsAnimation();
+    initScrollReveals();
+    initFormValidation();
+    initTiltCards();
+    initGlobalLightbox();
+    initProjectModal();
+  };
+
+  document.addEventListener('astro:page-load', setupPage);
+
+  document.addEventListener('astro:before-preparation', () => {
+    ScrollTrigger.getAll().forEach(t => t.kill());
+  });
+</script>
+
+<style>
+  /* Custom filter highlight classes */
+  .active-filter {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white !important;
+  }
+  
+  /* Scrollbar hide helper for carousels */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

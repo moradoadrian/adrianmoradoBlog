@@ -1,0 +1,146 @@
+---
+import PrimerosPasosLayout from '../../../layouts/PrimerosPasosLayout.astro';
+import YouTubeVideo from '../../../components/YouTubeVideo.astro';
+
+const title = 'Primeros pasos con Vue';
+const description = 'Guía de inicio rápido para aprender Vue.js desde cero. Componentes Single File (SFC), Directivas, Composition API y herramientas oficiales.';
+
+const headings = [
+  { slug: 'que-es-vue', text: '¿Qué es Vue.js?' },
+  { slug: 'para-que-sirve', text: '¿Para qué sirve?' },
+  { slug: 'ventajas-y-desventajas', text: 'Ventajas y Desventajas' },
+  { slug: 'crear-proyecto', text: '1. Crear el primer proyecto' },
+  { slug: 'estructura', text: '2. Estructura del proyecto' },
+  { slug: 'componentes', text: '3. Componentes SFC' },
+  { slug: 'directivas', text: '4. Directivas de Vue' },
+  { slug: 'ejecutar', text: '5. Ejecutar la aplicación' },
+  { slug: 'que-aprender-despues', text: '¿Qué aprender después?' },
+  { slug: 'curso-recomendado', text: 'Curso recomendado' }
+];
+---
+
+<PrimerosPasosLayout title={title} description={description} framework="vue" headings={headings}>
+  
+  <h2 id="que-es-vue">¿Qué es Vue.js?</h2>
+  <p>
+    Vue (pronunciado /vjuː/, como *view*) es un **framework progresivo de JavaScript** para construir interfaces de usuario. Diseñado para ser adoptado de manera incremental, destaca por combinar la facilidad de integración de una librería ligera con la potencia de herramientas avanzadas para estructurar Single Page Applications (SPA).
+  </p>
+
+  <h2 id="para-que-sirve">¿Para qué sirve?</h2>
+  <p>
+    Vue sirve para agilizar el desarrollo frontend facilitando la sincronización entre el estado lógico de JavaScript y la representación visual en el DOM. Es una opción muy popular gracias a su sintaxis intuitiva basada en HTML estándar y su reactividad transparente de grano fino.
+  </p>
+
+  <h2 id="ventajas-y-desventajas">Ventajas y Desventajas</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+    <div class="p-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
+      <h3 class="text-emerald-400 font-bold text-sm uppercase tracking-wider mb-2">Ventajas</h3>
+      <ul class="list-disc pl-5 text-xs sm:text-sm space-y-1 text-text-muted">
+        <li><strong>Curva de aprendizaje muy suave:</strong> Integra plantillas HTML tradicionales.</li>
+        <li><strong>SFC (Single File Components):</strong> HTML, JS/TS y CSS encapsulados en un solo archivo <code>.vue</code>.</li>
+        <li><strong>Excelente documentación:</strong> Una de las comunidades mejor estructuradas y guías amigables.</li>
+        <li><strong>Reactividad inteligente:</strong> Detecta dependencias automáticamente sin necesidad de hooks complejos.</li>
+      </ul>
+    </div>
+    
+    <div class="p-5 rounded-xl border border-red-500/20 bg-red-500/5">
+      <h3 class="text-red-400 font-bold text-sm uppercase tracking-wider mb-2">Desventajas</h3>
+      <ul class="list-disc pl-5 text-xs sm:text-sm space-y-1 text-text-muted">
+        <li><strong>Flexibilidad excesiva:</strong> Al soportar múltiples APIs (Options API y Composition API), diferentes proyectos pueden verse muy distintos.</li>
+        <li><strong>Menor mercado empresarial:</strong> En grandes corporaciones estadounidenses, Angular y React suelen tener mayor cuota que Vue.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TIP Banner -->
+  <div class="my-6 p-5 rounded-2xl border border-accent/30 bg-accent/5 space-y-2">
+    <div class="flex items-center gap-2 font-display font-bold text-sm text-white select-none">
+      <span class="text-lg">🚀</span>
+      <span class="text-accent">Dato Clave</span>
+    </div>
+    <p class="text-text-muted text-sm leading-relaxed m-0">
+      Vue 3 introdujo la **Composition API** y la etiqueta <code>&lt;script setup&gt;</code>. Esta combinación te permite escribir un código mucho más compacto, limpio y reutilizable que con el enfoque tradicional de Vue 2.
+    </p>
+  </div>
+
+  <h2 id="crear-proyecto">1. Crear el primer proyecto</h2>
+  <p>
+    El equipo oficial de Vue provee una herramienta de andamiaje interactiva basada en Vite. Abre tu terminal e introduce:
+  </p>
+  <pre><code>npm create vue@latest</code></pre>
+  <p>
+    La herramienta te guiará preguntando si deseas añadir TypeScript, soporte de JSX, Vue Router para navegación o Pinia para estado global. Para empezar de forma sencilla, puedes seleccionar **No** a todas las opciones excepto TypeScript si lo deseas.
+  </p>
+
+  <h2 id="estructura">2. Estructura del proyecto</h2>
+  <p>
+    Al abrir tu proyecto, verás carpetas estándar:
+  </p>
+  <ul class="list-disc pl-6 space-y-1">
+    <li><code>src/components/</code>: Carpeta para guardar tus componentes de Vue reusables.</li>
+    <li><code>src/App.vue</code>: El componente raíz donde se incrusta el resto.</li>
+    <li><code>src/main.ts</code>: Punto de entrada donde se monta la aplicación Vue en el DOM.</li>
+  </ul>
+
+  <h2 id="componentes">3. Componentes SFC</h2>
+  <p>
+    Un **Single File Component (.vue)** contiene tres bloques bien definidos que encapsulan la lógica, vista y diseño de una pieza de la UI:
+  </p>
+  <pre><code>&lt;script setup&gt;
+import &#123; ref &#125; from 'vue'
+const mensaje = ref('Hola desde Vue!')
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;h1&gt;&#123;&#123; mensaje &#125;&#125;&lt;/h1&gt;
+&lt;/template&gt;
+
+&lt;style scoped&gt;
+h1 &#123;
+  color: #42b983;
+&#125;
+&lt;/style&gt;</code></pre>
+
+  <h2 id="directivas">4. Directivas de Vue</h2>
+  <p>
+    Las **directivas** son atributos especiales con el prefijo <code>v-</code> que Vue utiliza para aplicar comportamientos reactivos al DOM:
+  </p>
+  <ul class="list-disc pl-6 space-y-2">
+    <li><code>v-if</code>: Renderiza condicionalmente un elemento.</li>
+    <li><code>v-for</code>: Renderiza una lista iterando sobre un array.</li>
+    <li><code>v-bind</code> (o <code>:</code>): Enlaza un atributo HTML con una variable reactiva.</li>
+    <li><code>v-on</code> (o <code>@</code>): Escucha eventos del DOM (ej. <code>@click="miFuncion"</code>).</li>
+  </ul>
+
+  <h2 id="ejecutar">5. Ejecutar la aplicación</h2>
+  <p>
+    Navega a la carpeta de tu nuevo proyecto, descarga las dependencias y corre el servidor de desarrollo:
+  </p>
+  <pre><code>cd nombre-de-tu-proyecto
+npm install
+npm run dev</code></pre>
+  <p>
+    Abre la dirección devuelta en consola (usualmente <a href="http://localhost:5173/" target="_blank">http://localhost:5173/</a>) para interactuar con tu sitio.
+  </p>
+
+  <h2 id="que-aprender-despues">¿Qué aprender después?</h2>
+  <p>
+    Una vez dominadas las directivas y componentes iniciales, continúa explorando:
+  </p>
+  <ol class="list-decimal pl-6 space-y-1">
+    <li>Comunicación de componentes mediante <code>defineProps</code> y <code>defineEmits</code>.</li>
+    <li>Manejo de estado reactivo global utilizando <strong>Pinia</strong>.</li>
+    <li>Creación de Single Page Applications con routing dinámico usando <strong>Vue Router</strong>.</li>
+  </ol>
+
+  <hr class="border-white/10 my-8" />
+
+  <h2 id="curso-recomendado">Curso recomendado</h2>
+  <p>
+    Complementa tu lectura con este excelente video tutorial interactivo:
+  </p>
+
+  <YouTubeVideo videoId="9AHMihFhrzw" title="Curso de Vue.js desde Cero para Principiantes" />
+
+</PrimerosPasosLayout>

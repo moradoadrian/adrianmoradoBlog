@@ -1,0 +1,18 @@
+---
+interface Props {
+  title?: string;
+  items: string[];
+}
+const { title, items = [] } = Astro.props;
+---
+<div class="my-6 glass-card p-6 rounded-2xl border border-white/10 max-w-2xl mx-auto shadow-md">
+  {title && <h4 class="text-sm font-semibold uppercase tracking-wider text-white mb-4 border-b border-white/5 pb-2 font-display">{title}</h4>}
+  <ul class="space-y-3">
+    {items.map(item => (
+      <li class="flex items-start gap-3 text-text-muted text-sm sm:text-base leading-relaxed select-none">
+        <span class="text-emerald-400 mt-0.5 text-base flex-shrink-0 font-bold">✓</span>
+        <span class="text-text-muted">{item}</span>
+      </li>
+    ))}
+  </ul>
+</div>
