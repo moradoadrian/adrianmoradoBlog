@@ -1,0 +1,365 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ForumSidebar from '../../components/ForumSidebar.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+// Obtener todas las preguntas del foro y ordenarlas por fecha de creación desc
+const allQuestions = (await getCollection('forum')).sort(
+  (a, b) => new Date(b.data.createdAt).valueOf() - new Date(a.data.createdAt).valueOf()
+);
+
+// Categorías del foro requeridas por el usuario
+const categoriesList = [
+  'Todos',
+  'Angular',
+  'React',
+  'Vue',
+  'Astro',
+  'JavaScript',
+  'TypeScript',
+  'CSS',
+  'HTML',
+  'Git',
+  'Herramientas',
+  'DevOps',
+  'General'
+];
+---
+
+<Layout title="Foro Técnico | César Adrián Morado" description="Foro de discusión técnica sobre desarrollo frontend, frameworks y herramientas web modernas. Resuelve tus dudas sobre Angular, React, Astro y más.">
+  <main class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12 relative">
+    
+    <!-- Hero Section -->
+    <div class="text-center space-y-4 max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-accent text-xs font-semibold uppercase tracking-wider font-sans">
+        💬 Foro Lite
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-display font-bold text-white tracking-tight leading-tight">
+        Preguntas y <span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Respuestas Técnicas</span>
+      </h1>
+      <p class="text-text-muted text-sm sm:text-base font-sans max-w-2xl mx-auto leading-relaxed">
+        Explora soluciones rápidas a dudas de programación o envía tus preguntas de desarrollo para resolver problemas del día a día.
+      </p>
+    </div>
+
+    <!-- Buscador y Categorías -->
+    <div class="max-w-4xl mx-auto space-y-6">
+      <!-- Search Input -->
+      <div class="relative glass-panel rounded-2xl border border-white/10 bg-card-dark/20 p-2 shadow-2xl flex items-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-5 h-5 text-text-muted absolute left-5 pointer-events-none">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="text" 
+          id="forum-search" 
+          placeholder="Buscar por título, etiquetas, tecnología o contenido..." 
+          class="w-full bg-transparent pl-12 pr-4 py-3 text-sm sm:text-base text-white placeholder-white/30 focus:outline-none font-sans"
+        />
+      </div>
+
+      <!-- Categories Filter -->
+      <div class="flex flex-wrap justify-center gap-2" id="categories-container">
+        {categoriesList.map((category) => (
+          <button
+            class={`px-4 py-1.5 rounded-full border border-white/5 bg-card-dark/40 text-text-muted text-xs font-semibold font-sans hover:border-primary/40 hover:text-white transition-all duration-300 cursor-pointer category-pill ${category === 'Todos' ? 'active-filter border-accent text-white bg-accent/10' : ''}`}
+            data-category={category}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Layout Grid (Main Content & Sidebar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Listado de Preguntas -->
+      <div class="lg:col-span-8 space-y-6">
+        
+        <!-- Headers de ordenación -->
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <h2 id="forum-results-title" class="text-sm font-bold uppercase tracking-wider text-text-muted font-sans select-none">Preguntas Recientes</h2>
+          <div class="flex items-center gap-2 text-xs font-sans text-text-muted">
+            <span class="font-semibold text-white">Visualizando:</span>
+            <span id="forum-counter">{allQuestions.length} hilos</span>
+          </div>
+        </div>
+
+        <!-- Hilos/Preguntas Grid -->
+        <div class="space-y-4" id="questions-list">
+          {allQuestions.map((q) => (
+            <article 
+              class="glass-card rounded-2xl p-6 border border-white/5 bg-card-dark/20 hover:border-primary/20 hover:shadow-[0_0_20px_rgba(0,212,255,0.05)] transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 question-card group"
+              data-title={q.data.title.toLowerCase()}
+              data-category={q.data.category}
+              data-tags={JSON.stringify(q.data.tags || [])}
+              data-body={q.body.toLowerCase()}
+              data-resolved={q.data.resolved ? 'true' : 'false'}
+            >
+              <!-- Info principal -->
+              <div class="space-y-3 flex-grow max-w-xl">
+                <div class="flex flex-wrap items-center gap-2 text-[11px] font-sans font-semibold">
+                  <span class="px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-accent uppercase tracking-wider">{q.data.category}</span>
+                  <span class="text-text-muted">&bull;</span>
+                  <span class="text-text-muted">{q.data.author}</span>
+                  <span class="text-text-muted">&bull;</span>
+                  <span class="text-text-muted">
+                    <FormattedDate date={q.data.createdAt} />
+                  </span>
+                </div>
+                
+                <a href={`/forum/${q.id}/`} class="block">
+                  <h3 class="text-lg sm:text-xl font-display font-bold text-white group-hover:text-accent transition-colors duration-300 leading-snug">
+                    {q.data.title}
+                  </h3>
+                </a>
+
+                <!-- Tags / Chips -->
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  {q.data.tags.map((tag) => (
+                    <span class="text-xs text-text-muted font-sans hover:text-white transition-colors duration-200">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Estado -->
+              <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                <!-- Badge de Estado -->
+                {q.data.resolved ? (
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold font-sans">
+                    ✅ Resuelto
+                  </span>
+                ) : (
+                  <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold font-sans">
+                    ⏳ Sin respuesta
+                  </span>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- Empty State -->
+        <div id="forum-empty-state" class="hidden text-center py-20 bg-card-dark/10 rounded-3xl border border-white/5 space-y-4">
+          <div class="text-4xl">🔍</div>
+          <h3 class="text-lg font-display font-bold text-white">No se encontraron hilos</h3>
+          <p class="text-text-muted text-sm font-sans max-w-md mx-auto">
+            Prueba buscando con palabras clave diferentes o selecciona otra categoría.
+          </p>
+        </div>
+
+        <!-- CTA: ¿No encontraste tu duda? -->
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left mt-8">
+          <div class="space-y-1">
+            <h3 class="text-lg font-display font-bold text-white">¿No encontraste tu duda?</h3>
+            <p class="text-text-muted text-xs sm:text-sm font-sans">Escríbeme directamente tu pregunta y te responderé lo antes posible.</p>
+          </div>
+          <a 
+            href="/contact" 
+            class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_20px_rgba(109,94,249,0.4)] text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 border border-primary/20 hover:border-accent text-center shrink-0 cursor-pointer"
+          >
+            Enviar Pregunta &rarr;
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Barra Lateral -->
+      <div class="lg:col-span-4">
+        <ForumSidebar />
+      </div>
+
+    </div>
+
+  </main>
+</Layout>
+
+<style>
+  /* Clases de utilidad para filtros activos */
+  .active-filter {
+    border-color: var(--color-accent, #6d5ef9) !important;
+    color: white !important;
+    background-color: rgba(109, 94, 249, 0.1) !important;
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  function setupForumIndex() {
+    const cards = document.querySelectorAll('.question-card');
+    const searchInput = document.getElementById('forum-search') as HTMLInputElement;
+    const categoryPills = document.querySelectorAll('.category-pill');
+    const sidebarCategoryBtns = document.querySelectorAll('.category-filter-btn');
+    const sidebarTagBtns = document.querySelectorAll('.tag-filter-btn');
+    const emptyState = document.getElementById('forum-empty-state');
+    const counterLabel = document.getElementById('forum-counter');
+    const resultsTitle = document.getElementById('forum-results-title');
+
+    if (!cards.length) return;
+
+    let activeCategory = 'Todos';
+    let activeTag = '';
+    let searchQuery = '';
+
+    const filterForum = () => {
+      let matchesCount = 0;
+
+      // Cambiar encabezado de resultados dependiendo si hay filtros
+      const isFiltered = searchQuery !== '' || activeCategory !== 'Todos' || activeTag !== '';
+      if (resultsTitle) {
+        resultsTitle.textContent = isFiltered ? 'Resultados de Búsqueda' : 'Preguntas Recientes';
+      }
+
+      cards.forEach((card) => {
+        const title = card.getAttribute('data-title') || '';
+        const category = card.getAttribute('data-category') || '';
+        const body = card.getAttribute('data-body') || '';
+        const rawTags = card.getAttribute('data-tags') || '[]';
+        const tags: string[] = JSON.parse(rawTags);
+
+        // Validar búsqueda
+        const matchesSearch = searchQuery === '' ||
+          title.includes(searchQuery) ||
+          body.includes(searchQuery) ||
+          category.toLowerCase().includes(searchQuery) ||
+          tags.some(t => t.toLowerCase().includes(searchQuery));
+
+        // Validar categoría
+        const matchesCategory = activeCategory === 'Todos' || category === activeCategory;
+
+        // Validar etiqueta
+        const matchesTag = activeTag === '' || tags.map(t => t.toLowerCase()).includes(activeTag.toLowerCase());
+
+        if (matchesSearch && matchesCategory && matchesTag) {
+          matchesCount++;
+          gsap.to(card, {
+            opacity: 1,
+            scale: 1,
+            duration: 0.3,
+            display: 'flex',
+            overwrite: 'auto'
+          });
+        } else {
+          gsap.to(card, {
+            opacity: 0,
+            scale: 0.95,
+            duration: 0.3,
+            display: 'none',
+            overwrite: 'auto'
+          });
+        }
+      });
+
+      // Actualizar contador
+      if (counterLabel) {
+        counterLabel.textContent = `${matchesCount} hilo${matchesCount !== 1 ? 's' : ''}`;
+      }
+
+      // Mostrar/Ocultar estado vacío
+      if (matchesCount === 0) {
+        emptyState?.classList.remove('hidden');
+      } else {
+        emptyState?.classList.add('hidden');
+      }
+    };
+
+    // 1. Filtro por píldoras de categorías (Página Principal)
+    categoryPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        categoryPills.forEach(p => p.classList.remove('active-filter'));
+        pill.classList.add('active-filter');
+
+        // Limpiar etiqueta activa al presionar categoría
+        activeTag = '';
+        sidebarTagBtns.forEach(b => b.classList.remove('border-primary/50', 'text-white'));
+
+        // Sincronizar botones de barra lateral si coinciden
+        const cat = pill.getAttribute('data-category') || 'Todos';
+        activeCategory = cat;
+
+        sidebarCategoryBtns.forEach(btn => {
+          const sidebarCat = btn.getAttribute('data-category');
+          const badge = btn.querySelector('span:last-child');
+          if (sidebarCat === cat) {
+            btn.classList.add('text-accent');
+            badge?.classList.add('border-accent/30', 'text-accent');
+          } else {
+            btn.classList.remove('text-accent');
+            badge?.classList.remove('border-accent/30', 'text-accent');
+          }
+        });
+
+        filterForum();
+      });
+    });
+
+    // 2. Filtro por categoría desde la Barra Lateral
+    sidebarCategoryBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const cat = btn.getAttribute('data-category') || 'Todos';
+        activeCategory = cat;
+        activeTag = '';
+
+        // Sincronizar píldoras principales
+        categoryPills.forEach(pill => {
+          const pillCat = pill.getAttribute('data-category');
+          if (pillCat === cat) {
+            pill.classList.add('active-filter');
+          } else {
+            pill.classList.remove('active-filter');
+          }
+        });
+
+        // Dar formato activo al botón lateral
+        sidebarCategoryBtns.forEach(b => {
+          const badge = b.querySelector('span:last-child');
+          b.classList.remove('text-accent');
+          badge?.classList.remove('border-accent/30', 'text-accent');
+        });
+        const activeBadge = btn.querySelector('span:last-child');
+        btn.classList.add('text-accent');
+        activeBadge?.classList.add('border-accent/30', 'text-accent');
+
+        // Limpiar tags activos
+        sidebarTagBtns.forEach(b => b.classList.remove('border-primary/50', 'text-white'));
+
+        filterForum();
+      });
+    });
+
+    // 3. Filtro por tags en la Barra Lateral
+    sidebarTagBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const clickedTag = btn.getAttribute('data-tag') || '';
+        
+        if (activeTag === clickedTag) {
+          activeTag = '';
+          btn.classList.remove('border-primary/50', 'text-white');
+        } else {
+          sidebarTagBtns.forEach(b => b.classList.remove('border-primary/50', 'text-white'));
+          activeTag = clickedTag;
+          btn.classList.add('border-primary/50', 'text-white');
+        }
+
+        filterForum();
+      });
+    });
+
+    // 4. Barra de búsqueda
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        filterForum();
+      });
+    }
+  }
+
+  // Inicializar en carga y cambios de vista
+  setupForumIndex();
+  document.addEventListener('astro:page-load', setupForumIndex);
+</script>

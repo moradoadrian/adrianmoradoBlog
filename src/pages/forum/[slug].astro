@@ -1,0 +1,214 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ForumSidebar from '../../components/ForumSidebar.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+// Generar rutas estáticas para todas las preguntas del foro
+export async function getStaticPaths() {
+  const forumEntries = await getCollection('forum');
+  return forumEntries.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+// Obtener todas las preguntas para calcular las relacionadas
+const allQuestions = await getCollection('forum');
+
+// Algoritmo de emparejamiento para preguntas relacionadas
+const relatedQuestions = allQuestions
+  .filter(q => q.id !== entry.id) // Excluir la pregunta actual
+  .map(q => {
+    const sharedTagsCount = q.data.tags.filter(tag => entry.data.tags.includes(tag)).length;
+    const isSameCategory = q.data.category.toLowerCase() === entry.data.category.toLowerCase() ? 1 : 0;
+    const score = (sharedTagsCount * 2) + (isSameCategory * 5); // Dar mayor peso a la misma categoría
+    return { q, score };
+  })
+  .filter(item => item.score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map(item => item.q);
+
+// Si no hay suficientes preguntas relacionadas por tag/categoría, rellenar con las más populares
+if (relatedQuestions.length < 3) {
+  const popularQuestions = allQuestions
+    .filter(q => q.id !== entry.id && !relatedQuestions.some(rq => rq.id === q.id))
+    .sort((a, b) => b.data.likes - a.data.likes)
+    .slice(0, 3 - relatedQuestions.length);
+  relatedQuestions.push(...popularQuestions);
+}
+
+// Configuración de SEO y Schema.org Q&A JSON-LD
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://adrianmorado-blog.vercel.app');
+const seoTitle = `${entry.data.title} | Foro Técnico`;
+const seoDescription = `Respuesta detallada a la pregunta: ${entry.data.title}. Foro de debate técnico de César Adrián Morado.`;
+
+// Generación del JSON-LD para QAPage estructurado
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "QAPage",
+  "mainEntity": {
+    "@type": "Question",
+    "name": entry.data.title,
+    "text": entry.body || entry.data.title,
+    "answerCount": 1,
+    "upvoteCount": entry.data.likes,
+    "dateCreated": entry.data.createdAt,
+    "author": {
+      "@type": "Person",
+      "name": entry.data.author
+    },
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Consulta la respuesta técnica detallada dentro del artículo.",
+      "upvoteCount": 1,
+      "url": canonicalURL.toString(),
+      "author": {
+        "@type": "Person",
+        "name": "Adrián Morado"
+      }
+    }
+  }
+};
+---
+
+<Layout title={seoTitle} description={seoDescription}>
+  <!-- Inyección de Schema.org en el Head de forma segura -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <main class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 relative">
+    
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs font-sans text-text-muted" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-white transition-colors duration-200">Inicio</a>
+      <span class="text-white/20">&gt;</span>
+      <a href="/forum" class="hover:text-white transition-colors duration-200">Foro</a>
+      <span class="text-white/20">&gt;</span>
+      <span class="text-accent">{entry.data.category}</span>
+      <span class="text-white/20">&gt;</span>
+      <span class="text-white font-medium line-clamp-1 max-w-[200px] sm:max-w-xs">{entry.data.title}</span>
+    </nav>
+
+    <!-- Botón Volver -->
+    <div>
+      <a 
+        href="/forum" 
+        class="inline-flex items-center gap-2 text-sm font-semibold text-text-muted hover:text-accent transition-colors duration-200 cursor-pointer font-sans"
+      >
+        &larr; Volver al foro
+      </a>
+    </div>
+
+    <!-- Layout Grid (Content & Sidebar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Detalle de la Pregunta -->
+      <div class="lg:col-span-8 space-y-8">
+        
+        <article class="glass-panel p-6 sm:p-10 rounded-3xl border border-white/10 bg-card-dark/20 shadow-2xl space-y-6 relative overflow-hidden">
+          <!-- Background glow inside article -->
+          <div class="absolute -top-32 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-[60px] pointer-events-none"></div>
+
+          <!-- Cabecera de pregunta -->
+          <div class="space-y-4 relative z-10">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-wrap items-center gap-2 text-xs font-sans font-semibold">
+                <span class="px-2.5 py-0.5 rounded bg-primary/10 border border-primary/20 text-accent uppercase tracking-wider">{entry.data.category}</span>
+                <span class="text-white/20">&bull;</span>
+                <span class="text-text-muted">Publicado por {entry.data.author}</span>
+                <span class="text-white/20">&bull;</span>
+                <span class="text-text-muted">
+                  <FormattedDate date={entry.data.createdAt} />
+                </span>
+              </div>
+
+              <!-- Badge de Estado -->
+              {entry.data.resolved ? (
+                <span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold font-sans">
+                  ✅ Resuelto
+                </span>
+              ) : (
+                <span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold font-sans">
+                  ⏳ Sin respuesta
+                </span>
+              )}
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-display font-bold text-white leading-snug">
+              {entry.data.title}
+            </h1>
+
+            <!-- Tags / Chips -->
+            <div class="flex flex-wrap gap-2 text-xs font-sans text-text-muted border-b border-white/5 pb-4">
+              {entry.data.tags.map((tag) => (
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <!-- Contenido Renderizado de Markdown (Pregunta y Respuesta) -->
+          <div class="prose prose-invert max-w-none text-white/90 font-sans leading-relaxed space-y-6 relative z-10">
+            <Content />
+          </div>
+
+          <!-- Footer de Interacción del hilo -->
+          <div class="flex items-center justify-end border-t border-white/5 pt-6 mt-8 relative z-10 text-xs font-sans text-text-muted">
+            <div>
+              ID del Hilo: <code class="text-accent bg-white/5 px-2 py-0.5 rounded">{entry.id}</code>
+            </div>
+          </div>
+        </article>
+
+        <!-- Preguntas Relacionadas -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-display font-bold text-white border-l-2 border-primary pl-3">Preguntas Relacionadas</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {relatedQuestions.map((q) => (
+              <a 
+                href={`/forum/${q.id}/`}
+                class="glass-card p-5 rounded-2xl border border-white/5 bg-card-dark/20 hover:border-accent/30 hover:scale-[1.02] transition-all duration-300 block space-y-2 h-full flex flex-col justify-between"
+              >
+                <div class="space-y-1">
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 border border-primary/20 text-accent uppercase font-bold tracking-wider">{q.data.category}</span>
+                  <h4 class="text-sm font-semibold text-white line-clamp-2 leading-snug pt-1">{q.data.title}</h4>
+                </div>
+                <div class="text-[10px] text-text-muted pt-2 flex items-center justify-between">
+                  <span><FormattedDate date={q.data.createdAt} /></span>
+                  <span>{q.data.resolved ? '✅' : '⏳'}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- CTA: ¿No encontraste tu duda? -->
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left mt-8">
+          <div class="space-y-1">
+            <h3 class="text-lg font-display font-bold text-white">¿No encontraste tu duda?</h3>
+            <p class="text-text-muted text-xs sm:text-sm font-sans">Escríbeme directamente tu pregunta y te responderé lo antes posible.</p>
+          </div>
+          <a 
+            href="/contact" 
+            class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary hover:shadow-[0_0_20px_rgba(109,94,249,0.4)] text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 border border-primary/20 hover:border-accent text-center shrink-0 cursor-pointer"
+          >
+            Enviar Pregunta &rarr;
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Barra Lateral -->
+      <div class="lg:col-span-4">
+        <ForumSidebar currentCategory={entry.data.category} currentTags={entry.data.tags} />
+      </div>
+
+    </div>
+
+  </main>
+</Layout>

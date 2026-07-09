@@ -1,0 +1,138 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  currentCategory?: string;
+  currentTags?: string[];
+}
+
+const { currentCategory, currentTags } = Astro.props;
+
+// Obtener todas las preguntas del foro y los artículos del blog
+const allQuestions = await getCollection('forum');
+const allBlogPosts = await getCollection('blog');
+
+// 1. Obtener lista de categorías y contar cuántas preguntas tiene cada una
+const categoriesCount = allQuestions.reduce((acc, q) => {
+  const cat = q.data.category;
+  acc[cat] = (acc[cat] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const categories = Object.entries(categoriesCount).map(([name, count]) => ({
+  name,
+  count
+})).sort((a, b) => b.count - a.count);
+
+// 2. Obtener etiquetas populares ordenadas por frecuencia
+const tagsCount = allQuestions.flatMap(q => q.data.tags || []).reduce((acc, tag) => {
+  acc[tag] = (acc[tag] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const popularTags = Object.entries(tagsCount)
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 10);
+
+// 3. Últimas 4 preguntas agregadas
+const latestQuestions = [...allQuestions]
+  .sort((a, b) => new Date(b.data.createdAt).valueOf() - new Date(a.data.createdAt).valueOf())
+  .slice(0, 4);
+
+// 4. Buscar artículos de blog relacionados
+let relatedBlogPosts = [];
+if (currentCategory || (currentTags && currentTags.length > 0)) {
+  relatedBlogPosts = allBlogPosts.filter(post => {
+    const sameCat = currentCategory && post.data.category.toLowerCase() === currentCategory.toLowerCase();
+    const shareTags = currentTags && post.data.tags?.some(tag => 
+      currentTags.map(t => t.toLowerCase()).includes(tag.toLowerCase())
+    );
+    return sameCat || shareTags;
+  }).slice(0, 3);
+}
+
+// Si no hay artículos relacionados específicos, mostrar los 3 artículos más recientes del blog
+if (relatedBlogPosts.length === 0) {
+  relatedBlogPosts = allBlogPosts
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 3);
+}
+---
+
+<aside class="space-y-8 lg:sticky lg:top-24">
+  <!-- Categorías del Foro -->
+  <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/20 space-y-4">
+    <h3 class="font-display font-bold text-white text-base border-b border-white/5 pb-2">Categorías</h3>
+    <ul class="space-y-2.5 text-sm font-sans">
+      {categories.map((cat) => (
+        <li>
+          <button
+            class="w-full flex items-center justify-between text-text-muted hover:text-accent transition-colors duration-200 text-left cursor-pointer category-filter-btn"
+            data-category={cat.name}
+          >
+            <span>{cat.name}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/50">{cat.count}</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Etiquetas Populares -->
+  <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/20 space-y-4">
+    <h3 class="font-display font-bold text-white text-base border-b border-white/5 pb-2">Etiquetas Populares</h3>
+    <div class="flex flex-wrap gap-2 text-xs font-sans">
+      {popularTags.map((tag) => (
+        <button
+          class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/30 text-text-muted hover:text-white transition-all duration-200 cursor-pointer tag-filter-btn"
+          data-tag={tag.name}
+        >
+          #{tag.name}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- Últimas Preguntas -->
+  <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/20 space-y-4">
+    <h3 class="font-display font-bold text-white text-base border-b border-white/5 pb-2">Últimas Preguntas</h3>
+    <ul class="space-y-3 text-sm font-sans">
+      {latestQuestions.map((q) => (
+        <li>
+          <a href={`/forum/${q.id}/`} class="group block space-y-1">
+            <h4 class="text-white group-hover:text-accent font-medium leading-snug transition-colors duration-200 line-clamp-2">
+              {q.data.title}
+            </h4>
+            <div class="text-[11px] text-text-muted flex items-center gap-1.5">
+              <span>{q.data.category}</span>
+              <span>&bull;</span>
+              <span>{q.data.resolved ? '✅ Resuelto' : '⏳ Sin respuesta'}</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Artículos del Blog Sugeridos -->
+  <div class="glass-card p-6 rounded-2xl border border-white/5 bg-card-dark/20 space-y-4">
+    <h3 class="font-display font-bold text-white text-base border-b border-white/5 pb-2">Lecturas Sugeridas</h3>
+    <ul class="space-y-3.5 text-sm font-sans">
+      {relatedBlogPosts.map((post) => (
+        <li>
+          <a href={`/blog/${post.id}/`} class="group block space-y-1">
+            <h4 class="text-white group-hover:text-accent font-medium leading-snug transition-colors duration-200 line-clamp-2">
+              {post.data.title}
+            </h4>
+            <div class="text-[11px] text-text-muted flex items-center gap-1.5">
+              <span class="text-accent">{post.data.category}</span>
+              <span>&bull;</span>
+              <span>{post.data.difficulty}</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</aside>

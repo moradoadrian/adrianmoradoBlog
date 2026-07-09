@@ -31,4 +31,18 @@ const blog = defineCollection({
     }),
 });
 
-export const collections = { blog };
+const forum = defineCollection({
+  loader: glob({ base: './src/content/forum', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    title: z.string(),
+    category: z.string(),
+    author: z.string().default('Adrián Morado'),
+    createdAt: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    resolved: z.boolean().default(false),
+    views: z.number().default(0),
+    likes: z.number().default(0),
+  }),
+});
+
+export const collections = { blog, forum };
