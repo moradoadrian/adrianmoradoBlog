@@ -30,6 +30,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 4. Inicializar Resend con la variable de entorno protegida en el servidor
+    console.log("API KEY:", import.meta.env.RESEND_API_KEY);
     const apiKey = import.meta.env.RESEND_API_KEY;
     if (!apiKey) {
       console.error('Error de servidor: La variable de entorno RESEND_API_KEY no está configurada.');
