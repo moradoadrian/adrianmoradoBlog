@@ -1,0 +1,47 @@
+---
+title: 'Antigravity & Antigravity CLI: Automatizando el desarrollo con Inteligencia Artificial'
+description: 'Guía práctica para entender cómo utilizar Antigravity y su potente interfaz de línea de comandos (CLI) para agilizar tareas, generar código y automatizar workflows locales.'
+pubDate: '2026-07-09'
+category: 'Herramientas'
+difficulty: 'Intermedio'
+tags: ['Antigravity', 'CLI', 'AI', 'Herramientas']
+featured: false
+heroImage: '../../assets/antigravity_cli.png'
+author:
+  name: 'César Adrián Morado'
+  avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Cesar'
+---
+
+El desarrollo impulsado por inteligencia artificial ha dejado de ser una promesa de futuro para convertirse en una realidad diaria. Entre las herramientas más innovadoras destaca **Antigravity**, un entorno inteligente capaz de cooperar en la resolución de problemas de software complejos mediante agentes de código autónomos.
+
+En este artículo, exploraremos qué es Antigravity, cómo usar su herramienta de terminal (**Antigravity CLI**) y cómo integrarlo en tu flujo de desarrollo frontend diario.
+
+---
+
+## ¿Qué es Antigravity?
+
+**Antigravity** es un asistente de programación basado en agentes de código diseñado por el equipo de **Google DeepMind**. A diferencia de los autocompletados estándar (como Copilot), Antigravity opera bajo una mentalidad de **bucle de retroalimentación activa**:
+* **Lectura del espacio de trabajo:** Analiza la arquitectura del proyecto antes de sugerir cambios.
+* **Propuestas estructuradas:** Genera planes de implementación en archivos Markdown (`implementation_plan.md`) para revisión del desarrollador.
+* **Ejecución y corrección autónoma:** Ejecuta comandos de consola, instala paquetes y realiza pruebas unitarias para auto-corregir errores de compilación antes de entregarte el código final.
+
+---
+
+## Antigravity CLI: Potencia en tu Terminal
+
+El CLI de Antigravity te permite invocar capacidades autónomas de refactorización y depuración directamente desde tu terminal favorita.
+
+### Comandos Esenciales
+
+* **`antigravity init`**: Analiza el directorio actual y genera un archivo de configuración base detectando frameworks (como Astro, Angular o React).
+* **`antigravity task "instala tailwind y configúralo"`**: Inicializa una subtarea autónoma donde el agente instala los paquetes, edita los archivos de configuración y comprueba que no haya errores de compilación.
+* **`antigravity check --fix`**: Ejecuta linters y formateadores automáticos basándose en las reglas declaradas en tu carpeta `.agents/`.
+
+---
+
+## Beneficios en Proyectos Frontend
+
+Cuando trabajas en proyectos modulares (por ejemplo, con **Astro** o **Angular**), el CLI destaca por:
+1. **Consistencia arquitectónica:** Sigue los patrones de diseño ya presentes en tu código en lugar de inventar convenciones nuevas.
+2. **Pruebas automáticas de compilación:** Realiza builds de producción locales y lee las consolas para ajustar las importaciones de TypeScript rotas de manera autónoma.
+3. **Control de cambios controlado:** Procesa cambios en fragmentos lógicos pequeños, facilitando revisiones limpias en Git.

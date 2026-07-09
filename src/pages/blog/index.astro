@@ -216,8 +216,6 @@ const findPostForStep = (seriesId: string, stepNum: number) => {
                 <span class="text-text-muted flex items-center gap-1">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{featuredPost.data.difficulty}
                 </span>
-                <span class="text-text-muted">&bull;</span>
-                <span class="text-text-muted">👁️ {featuredPost.data.views} vistas</span>
               </div>
               <a href={`/blog/${featuredPost.id}/`} class="block">
                 <h3 class="text-2xl sm:text-3xl font-display font-bold text-white group-hover:text-accent transition-colors duration-300">
@@ -285,7 +283,6 @@ const findPostForStep = (seriesId: string, stepNum: number) => {
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{post.data.difficulty}
                     </span>
                   </div>
-                  <span>👁️ {post.data.views}</span>
                 </div>
 
                 <div class="space-y-2 flex-grow">

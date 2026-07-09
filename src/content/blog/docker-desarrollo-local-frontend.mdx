@@ -1,0 +1,85 @@
+---
+title: 'Docker para Desarrolladores Frontend: Entornos de Desarrollo Consistentes'
+description: 'Descubre cómo Dockerizar tus flujos de trabajo locales en React, Angular y Astro. Olvídate del clásico "en mi máquina sí funciona" configurando contenedores con Node y Docker Compose.'
+pubDate: '2026-07-09'
+category: 'Herramientas'
+difficulty: 'Intermedio'
+tags: ['Docker', 'DevOps', 'Frontend', 'Herramientas']
+featured: false
+heroImage: '../../assets/docker_frontend.png'
+author:
+  name: 'César Adrián Morado'
+  avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Cesar'
+---
+
+Es una escena clásica en el desarrollo de software: un nuevo programador se une al equipo, clona el repositorio y al ejecutar `npm install` obtiene decenas de errores de dependencias porque su versión de Node.js local es incompatible con la del proyecto.
+
+Aquí es donde entra **Docker**. Aunque suele asociarse al despliegue en la nube y al backend, Docker es una herramienta imprescindible para estandarizar los entornos de desarrollo Frontend. En esta guía aprenderás cómo aplicarlo a tus proyectos.
+
+---
+
+## ¿Por qué usar Docker en el Frontend?
+
+1. **Aislamiento de versión de Node.js:** Puedes tener un proyecto en Node 16 y otro en Node 22 corriendo al mismo tiempo sin tener que lidiar con NVM (Node Version Manager).
+2. **Homogeneidad de entorno:** El contenedor asegura que tanto tú en tu máquina local (sea macOS, Windows o Linux) como tus servidores de integración continua utilicen la misma arquitectura interna.
+3. **Fácil integración con Backends locales:** Si tu aplicación consume una API de base de datos que corre en local, puedes levantar todo el ecosistema (PostgreSQL, API y Frontend) con un solo comando.
+
+---
+
+## Dockerfile Básico para un Proyecto Frontend
+
+Este es un ejemplo de un `Dockerfile` optimizado para el desarrollo local de una SPA o sitio web estático (como un proyecto Astro o Vite):
+
+```dockerfile
+# 1. Utilizar una imagen oficial ligera de Node
+FROM node:22-alpine
+
+# 2. Definir el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# 3. Copiar los archivos de configuración de dependencias
+COPY package*.json ./
+
+# 4. Instalar las dependencias del proyecto
+RUN npm install
+
+# 5. Copiar el resto del código del portafolio
+COPY . .
+
+# 6. Exponer el puerto del servidor de desarrollo (por ejemplo, el 4321 de Astro)
+EXPOSE 4321
+
+# 7. Iniciar el servidor local
+CMD ["npm", "run", "dev", "--", "--host"]
+```
+
+---
+
+## Docker Compose para Desarrollo Ágil
+
+Para evitar recordar comandos largos de terminal como `docker build` y `docker run`, creamos un archivo `docker-compose.yml` que simplifica todo el proceso de arranque:
+
+```yaml
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "4321:4321"
+    volumes:
+      # Sincroniza tu código local con el contenedor para permitir Hot Reload (HMR)
+      - .:/app
+      # Protege la carpeta node_modules del contenedor para que no se sobreescriba con la de tu máquina física
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+```
+
+Con esta configuración en tu directorio raíz, cualquier desarrollador del equipo solo necesitará escribir:
+
+```bash
+docker-compose up
+```
+
+Y el servidor de desarrollo de Astro se encenderá automáticamente con soporte completo para recargas en caliente. ¡Ese es el verdadero poder de Docker en el desarrollo web moderno!
