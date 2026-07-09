@@ -30,7 +30,6 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 4. Inicializar Resend con la variable de entorno protegida en el servidor
-    console.log("API KEY:", import.meta.env.RESEND_API_KEY);
     const apiKey = import.meta.env.RESEND_API_KEY;
     if (!apiKey) {
       console.error('Error de servidor: La variable de entorno RESEND_API_KEY no está configurada.');
@@ -47,7 +46,7 @@ export const POST: APIRoute = async ({ request }) => {
     // y el destino "to" es tu correo de administrador registrado.
     const { data, error } = await resend.emails.send({
       from: 'Portfolio Contact <onboarding@resend.dev>',
-      to: 'cesar.morado.rodriguez@gmail.com',
+      to: 'moradoadrian@gmail.com',
       subject: 'Nuevo mensaje desde mi Portafolio',
       text: `Nombre: ${name}\n\nCorreo: ${email}\n\nAsunto: ${subject}\n\nMensaje:\n${message}`,
     });

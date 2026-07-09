@@ -819,7 +819,7 @@ const experiences = [
         </form>
 
         <!-- Success Toast -->
-        <div id="form-success" class="absolute inset-0 bg-bg-dark/95 flex flex-col items-center justify-center text-center p-6 space-y-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div id="form-success" class="absolute inset-0 z-20 bg-bg-dark/95 flex flex-col items-center justify-center text-center p-6 space-y-4 opacity-0 pointer-events-none transition-all duration-300">
           <div class="w-16 h-16 rounded-full bg-[#27c93f]/15 border border-[#27c93f]/30 flex items-center justify-center text-[#27c93f] text-3xl font-bold animate-bounce">
             ✓
           </div>
@@ -1242,9 +1242,54 @@ const experiences = [
       }
 
       if (!hasError) {
-        // Show success layout with GSAP
-        successToast.classList.remove('pointer-events-none');
-        gsap.to(successToast, { opacity: 1, duration: 0.4 });
+        // Obtener elementos de envío para cambiar el estado visual
+        const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+        const btnSpan = submitBtn?.querySelector('span');
+        const originalText = btnSpan ? btnSpan.textContent : 'Enviar Mensaje';
+
+        if (submitBtn && btnSpan) {
+          submitBtn.disabled = true;
+          btnSpan.textContent = 'Enviando...';
+        }
+
+        // Estructurar el payload del correo
+        const payload = {
+          name: nameIn.value,
+          email: emailIn.value,
+          subject: subjectIn.value,
+          message: messageIn.value
+        };
+
+        // Enviar la petición POST al endpoint de Astro
+        fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(async (response) => {
+          const result = await response.json();
+          if (response.ok) {
+            // Mostrar la ventana de éxito de GSAP si todo salió bien
+            successToast.classList.remove('pointer-events-none');
+            gsap.to(successToast, { opacity: 1, duration: 0.4 });
+          } else {
+            // Mostrar error controlado del servidor
+            alert(result.error || 'Ocurrió un error al enviar el formulario.');
+          }
+        })
+        .catch((err) => {
+          console.error('Error de red al enviar formulario:', err);
+          alert('Ocurrió un error de red al intentar enviar el mensaje.');
+        })
+        .finally(() => {
+          // Restaurar estado del botón de envío
+          if (submitBtn && btnSpan) {
+            submitBtn.disabled = false;
+            btnSpan.textContent = originalText;
+          }
+        });
       }
     });
 
