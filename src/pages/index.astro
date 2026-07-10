@@ -251,7 +251,7 @@ const experiences = [
             <!-- Marco glow con foto -->
             <div class="relative aspect-square w-full rounded-2xl overflow-hidden border border-white/10 group-hover:border-accent/50 transition-colors duration-500 shadow-inner">
               <div class="absolute inset-0 bg-gradient-to-t from-bg-dark/80 via-transparent to-transparent z-10"></div>
-              <img src="/1757554006561.jpg" alt="César Adrián Morado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+              <img src="/1757554006561.jpg" alt="César Adrián Morado" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" decoding="async" />
             </div>
 
             <!-- Metadata List -->
@@ -479,7 +479,7 @@ const experiences = [
                 data-caption={`${cert.title} — ${cert.issuer} (${cert.date})`}
               >
                 <div class="relative aspect-video w-full overflow-hidden border-b border-white/5 bg-card-dark flex items-center justify-center">
-                  <img src={cert.img} alt={cert.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
+                  <img src={cert.img} alt={cert.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" decoding="async" />
                   <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <span class="px-4 py-2 rounded-full bg-accent text-bg-dark font-bold text-xs uppercase tracking-wider">Ver certificado</span>
                   </div>
@@ -643,7 +643,7 @@ const experiences = [
             >
               <!-- Image Container -->
               <div class="relative overflow-hidden aspect-video border-b border-white/5 bg-bg-dark flex items-center justify-center">
-                <img src={proj.image} alt={proj.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" loading="lazy" decoding="async" />
+                <img src={proj.image} alt={proj.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" decoding="async" />
                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <span class="px-4 py-2 rounded-full bg-accent text-bg-dark font-bold text-xs uppercase tracking-wider shadow-lg">Ver Detalles</span>
                 </div>
@@ -1028,11 +1028,11 @@ const experiences = [
     timelineItems.forEach((item) => {
       gsap.from(item, {
         opacity: 0,
-        x: -50,
-        duration: 0.8,
+        x: -30,
+        duration: 0.6,
         scrollTrigger: {
           trigger: item,
-          start: 'top 80%',
+          start: 'top bottom-=20px',
           toggleActions: 'play none none none'
         }
       });

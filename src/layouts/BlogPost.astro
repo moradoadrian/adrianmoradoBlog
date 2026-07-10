@@ -238,7 +238,7 @@ const relatedPosts = allPosts
         <!-- Article Image -->
         {heroImage && (
           <div class="relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-            <Image width={1020} height={510} src={heroImage} alt={title} class="w-full h-full object-cover" />
+            <Image width={1020} height={510} src={heroImage} alt={title} class="w-full h-full object-cover" loading="eager" />
           </div>
         )}
 
@@ -499,7 +499,6 @@ const relatedPosts = allPosts
     initMermaid();
   };
 
-  runAll();
   document.addEventListener('astro:page-load', runAll);
 </script>
 

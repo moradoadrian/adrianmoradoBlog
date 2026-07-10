@@ -202,6 +202,7 @@ const findPostForStep = (seriesId: string, stepNum: number) => {
                 src={featuredPost.data.heroImage} 
                 alt={featuredPost.data.title}
                 class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" 
+                loading="eager"
               />
             )}
             <div class="absolute top-4 right-4 px-2.5 py-1 rounded bg-bg-dark/80 backdrop-blur-sm border border-white/10 text-[10px] font-bold text-text-muted">
@@ -247,7 +248,7 @@ const findPostForStep = (seriesId: string, stepNum: number) => {
       
       <!-- Article grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
-        {regularPosts.map((post) => {
+        {regularPosts.map((post, index) => {
           const rTime = getReadingTime(post.body);
           return (
             <article 
@@ -267,6 +268,7 @@ const findPostForStep = (seriesId: string, stepNum: number) => {
                     src={post.data.heroImage} 
                     alt={post.data.title}
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    loading={index < 2 ? "eager" : "lazy"}
                   />
                 )}
                 <div class="absolute top-4 right-4 px-2 py-0.5 rounded bg-bg-dark/80 backdrop-blur-sm border border-white/10 text-[9px] font-bold text-text-muted">
@@ -520,7 +522,6 @@ const findPostForStep = (seriesId: string, stepNum: number) => {
     });
   }
 
-  setupBlogEngine();
   document.addEventListener('astro:page-load', setupBlogEngine);
 </script>
 
