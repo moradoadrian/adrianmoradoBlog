@@ -72,6 +72,13 @@ const { title, description } = Astro.props;
         
         if (!ring || !dot) return;
 
+        // Skip setup on touch/mobile devices
+        if (window.matchMedia('(pointer: coarse)').matches) {
+          ring.style.display = 'none';
+          dot.style.display = 'none';
+          return;
+        }
+
         // Set initial positions
         gsap.set(ring, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
         gsap.set(dot, { xPercent: -50, yPercent: -50, x: window.innerWidth / 2, y: window.innerHeight / 2 });
