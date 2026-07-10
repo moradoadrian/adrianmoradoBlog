@@ -44,9 +44,14 @@ const { title, description } = Astro.props;
       let lenis: Lenis | null = null;
       let scrollTriggerInstance: ScrollTrigger | null = null;
 
+      function lenisTicker(time: number) {
+        lenis?.raf(time * 1000);
+      }
+
       function initLenis() {
         if (lenis) {
           lenis.destroy();
+          gsap.ticker.remove(lenisTicker);
         }
         
         lenis = new Lenis({
@@ -59,10 +64,7 @@ const { title, description } = Astro.props;
         // Sync ScrollTrigger with Lenis
         lenis.on('scroll', ScrollTrigger.update);
 
-        gsap.ticker.add((time) => {
-          lenis?.raf(time * 1000);
-        });
-
+        gsap.ticker.add(lenisTicker);
         gsap.ticker.lagSmoothing(0);
       }
 
@@ -153,7 +155,6 @@ const { title, description } = Astro.props;
         ScrollTrigger.refresh();
       };
 
-      setup();
       document.addEventListener('astro:page-load', setup);
     </script>
   </body>

@@ -923,10 +923,12 @@ const experiences = [
     let mouseX = width / 2;
     let mouseY = height / 2;
 
-    window.addEventListener('mousemove', (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-    });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
 
     let animationFrameId: number;
 
@@ -992,6 +994,7 @@ const experiences = [
     document.addEventListener('astro:before-preparation', () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
     }, { once: true });
   }
 
